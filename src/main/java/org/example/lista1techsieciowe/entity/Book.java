@@ -12,8 +12,13 @@ public class Book {
     @Column(name = "book_id")
     @JsonProperty("bookId")
     private Integer bookId;
+
+    @OneToOne(mappedBy = "book")
+    private BookDetails bookDetails;
     @OneToMany(mappedBy = "book")
     private List<Review> reviews;
+    @OneToMany(mappedBy = "book")
+    private List<Loan> loans;
     @Basic
     @Column(name = "isbn")
     private String isbn;
@@ -32,6 +37,14 @@ public class Book {
     @Basic
     @Column(name = "available_copies")
     private Integer availableCopies;
+
+    public BookDetails getBookDetails() {
+        return bookDetails;
+    }
+
+    public void setBookDetails(BookDetails bookDetails) {
+        this.bookDetails = bookDetails;
+    }
 
     public void setBookId(Integer id) {
         this.bookId = id;
@@ -81,5 +94,12 @@ public class Book {
     }
     public Integer getAvailableCopies() {
         return availableCopies;
+    }
+    public List<Loan> getLoans() {
+        return loans;
+    }
+
+    public void setLoans(List<Loan> loans) {
+        this.loans = loans;
     }
 }

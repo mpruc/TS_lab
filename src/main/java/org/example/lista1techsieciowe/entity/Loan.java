@@ -11,7 +11,6 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "loan_id")
     private Integer loanId;
-
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;

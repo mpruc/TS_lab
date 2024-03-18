@@ -13,6 +13,8 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Review> reviews;
+    @OneToMany(mappedBy = "user")
+    private List<Loan> loans;
     @Basic
     @Column(name = "username")
     private String username;
@@ -28,6 +30,22 @@ public class User {
     @Basic
     @Column(name = "name")
     private String name;
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public List<Loan> getLoans() {
+        return loans;
+    }
+
+    public void setLoans(List<Loan> loans) {
+        this.loans = loans;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
 
     public void setUserId(Integer userId) {
         this.userId = userId;

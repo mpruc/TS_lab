@@ -27,6 +27,15 @@ public class BookDetails {
     @Column(name = "cover_image_url")
     private String coverImageUrl;
 
+    public Integer getBookDetailsId() {
+        return bookDetailsId;
+    }
+
+    public void setBookDetailsId(Integer bookDetailsId) {
+        this.bookDetailsId = bookDetailsId;
+    }
+
+
     public Book getBook() {
         return book;
     }
