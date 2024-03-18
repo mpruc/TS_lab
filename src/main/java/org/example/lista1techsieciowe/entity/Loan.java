@@ -18,10 +18,13 @@ public class Loan {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @Basic
     @Column(name = "loan_date")
     private Date loanDate;
+    @Basic
     @Column(name = "due_date")
     private Date dueDate;
+    @Basic
     @Column(name = "return_date")
     private Date returnDate;
     public Integer getLoanId() {

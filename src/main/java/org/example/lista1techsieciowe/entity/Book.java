@@ -8,16 +8,22 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "book_id")
     private Integer bookId;
+    @Basic
     @Column(name = "isbn")
     private String isbn;
+    @Basic
     @Column(name = "title")
     private String title;
+    @Basic
     @Column(name = "author")
     private String author;
+    @Basic
     @Column(name = "publisher")
     private String publisher;
+    @Basic
     @Column(name = "year_of_publish")
     private String yearOfPublish;
+    @Basic
     @Column(name = "available_copies")
     private Integer availableCopies;
 

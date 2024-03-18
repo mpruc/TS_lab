@@ -18,10 +18,13 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @Basic
     @Column(name = "grade")
     private double grade;
+    @Basic
     @Column(name = "comment")
     private String comment;
+    @Basic
     @Column(name = "review_date")
     private Date reviewDate;
 

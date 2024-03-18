@@ -15,12 +15,15 @@ public class BookDetails {
     @JoinColumn(name = "book_id")
     private Book book;
 
+    @Basic
     @Column(name = "genre")
     private String genre;
 
+    @Basic
     @Column(name = "summary")
     private String summary;
 
+    @Basic
     @Column(name = "cover_image_url")
     private String coverImageUrl;
 
