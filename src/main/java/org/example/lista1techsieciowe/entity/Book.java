@@ -1,5 +1,8 @@
 package org.example.lista1techsieciowe.entity;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "book")
@@ -7,7 +10,10 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "book_id")
+    @JsonProperty("bookId")
     private Integer bookId;
+    @OneToMany(mappedBy = "book")
+    private List<Review> reviews;
     @Basic
     @Column(name = "isbn")
     private String isbn;
@@ -27,59 +33,52 @@ public class Book {
     @Column(name = "available_copies")
     private Integer availableCopies;
 
-    public void setId(Integer id) {
+    public void setBookId(Integer id) {
         this.bookId = id;
     }
-
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
-
     public void setAuthor(String author) {
         this.author = author;
     }
-
     public void setPublisher(String publisher) {
         this.publisher = publisher;
     }
+    public List<Review> getReviews() {
+        return reviews;
+    }
 
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
     public void setYearOfPublish(String yearOfPublish) {
         this.yearOfPublish = yearOfPublish;
     }
-
     public void setAvailableCopies(Integer availableCopies) {
         this.availableCopies = availableCopies;
     }
-
-    private Integer getId() {
+    private Integer getBookId() {
         return bookId;
     }
-
-
     public String getIsbn() {
         return isbn;
     }
-
     public String getTitle() {
         return title;
     }
-
     public String getAuthor() {
         return author;
     }
-
     public String getPublisher() {
         return publisher;
     }
-
     public String getYearOfPublish() {
         return yearOfPublish;
     }
-
     public Integer getAvailableCopies() {
         return availableCopies;
     }

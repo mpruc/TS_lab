@@ -1,6 +1,8 @@
 package org.example.lista1techsieciowe.entity;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "user")
 public class User {
@@ -8,6 +10,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_Id")
     private Integer userId;
+
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews;
     @Basic
     @Column(name = "username")
     private String username;

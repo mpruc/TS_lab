@@ -22,8 +22,7 @@ public class BookService {
     public Book getBook(int id) {
         return bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
     }
-    public Book addBook(Book book) {
-        return bookRepository.save(book);
+    public Book addBook(Book book) { return bookRepository.save(book);
     }
     public void deleteBook(int id) {
         bookRepository.deleteById(id);

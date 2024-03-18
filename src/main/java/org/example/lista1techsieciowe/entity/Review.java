@@ -1,7 +1,8 @@
 package org.example.lista1techsieciowe.entity;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "review")
@@ -12,12 +13,13 @@ public class Review {
     private Integer reviewId;
 
     @ManyToOne
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
     @Basic
     @Column(name = "grade")
     private double grade;
