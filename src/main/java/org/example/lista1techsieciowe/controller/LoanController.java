@@ -25,7 +25,7 @@ public class LoanController {
     }
 
     @GetMapping("/getAll")
-    public @ResponseBody List<Loan> getAllLoans(){
+    public @ResponseBody Iterable <Loan> getAllLoans(){
         return loanService.getAll();
     }
 
