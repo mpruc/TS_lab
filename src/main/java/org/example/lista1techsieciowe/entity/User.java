@@ -1,5 +1,6 @@
 package org.example.lista1techsieciowe.entity;
 import jakarta.persistence.*;
+import org.example.lista1techsieciowe.commonTypes.UserRole;
 
 import java.util.List;
 
@@ -11,25 +12,27 @@ public class User {
     @Column(name = "user_Id")
     private Integer userId;
 
-    @OneToMany(mappedBy = "user")
-    private List<Review> reviews;
-    @OneToMany(mappedBy = "user")
-    private List<Loan> loans;
-    @Basic
-    @Column(name = "username")
-    private String username;
-    @Basic
-    @Column(name="password")
-    private String password;
-    @Basic
-    @Column(name = "role")
-    private String role;
     @Basic
     @Column(name = "email")
     private String email;
     @Basic
     @Column(name = "name")
     private String name;
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews;
+    @OneToMany(mappedBy = "user")
+    private List<Loan> loans;
+
+    @OneToOne(mappedBy = "user")
+    private Login login;
+
+    public Login getLogin() {
+        return login;
+    }
+
+    public void setLogin(Login login) {
+        this.login = login;
+    }
 
     public List<Review> getReviews() {
         return reviews;
@@ -51,18 +54,6 @@ public class User {
         this.userId = userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -73,18 +64,6 @@ public class User {
 
     public Integer getUserId() {
         return userId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getRole() {
-        return role;
     }
 
     public String getEmail() {
