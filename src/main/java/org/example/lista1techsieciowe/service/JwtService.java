@@ -22,8 +22,11 @@ import java.util.function.Function;
 public class JwtService {
     public String generateToken(Login logDetail) {
         return generateToken(new HashMap<>(), logDetail);
-
     }
+
+    @Value("${jwt.token.key}")
+    private String key;
+
     public boolean isTokenValid(String token) {
         try {
             return !isTokenExpired(token);
@@ -31,16 +34,16 @@ public class JwtService {
             return false;
         }
     }
-    @Value("${jwt.token.key}")
-    private String key;
 
 
     private Date extractDate(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
+
     public UserRole extractRole(String token) {
         String roleString = extractClaim(token, (claims) -> claims.get("role", String.class));
         return UserRole.valueOf(roleString);
@@ -52,17 +55,27 @@ public class JwtService {
     }
 
     private boolean isTokenExpired(String token) {
+
         return extractDate(token).before(new Date());
     }
+
     private String generateToken(Map<String, Object>extraClaims, Login logDetails) {
-        long timeMillis = System.currentTimeMillis();
+//        long timeMillis = System.currentTimeMillis();
+        extraClaims.put("role", logDetails.getRole());
         String token = Jwts.builder()
-                    .issuedAt(new Date(timeMillis))
-                    .expiration(new Date(timeMillis + 5*60*1000))// 5 min ważności
-                    .claim("id", "userId") //z bazy danych
-                    .claim("userRole", "ROLE_") // rola z bd
-                    .signWith(getSigningKey())
-                    .compact();
+                .claims(extraClaims)
+                .subject(logDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis()+5*60*1000))
+                .signWith(getSigningKey())
+                .compact();
+
+//                    .issuedAt(new Date(timeMillis))
+//                    .expiration(new Date(timeMillis + 5*60*1000))// 5 min ważności
+//                    .claim("id", "userId") //z bazy danych
+//                    .claim("userRole", "ROLE_") // rola z bd
+//                    .signWith(getSigningKey())
+//                    .compact();
             return token;
     }
     private SecretKey getSigningKey() {
@@ -70,7 +83,11 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
     private Claims extractAllClaims(String token) {
-         return Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token).getPayload();
+         return Jwts.parser()
+                 .verifyWith(getSigningKey())
+                 .build()
+                 .parseSignedClaims(token)
+                 .getPayload();
     }
 
 }

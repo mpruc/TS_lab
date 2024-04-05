@@ -7,16 +7,18 @@ import org.example.lista1techsieciowe.commonTypes.UserRole;
 @Table(name="login")
 public class Login {
     @Id
-    @Column(name = "login_Id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "login_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer loginId;
-    @Basic
+
     @Column(name = "username", unique = true, nullable = false)
+    @Basic
     private String username;
-    @Basic
+
     @Column(name="password", nullable = false)
-    private String password;
     @Basic
+    private String password;
+
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;

@@ -4,6 +4,7 @@ import org.example.lista1techsieciowe.entity.BookDetails;
 import org.example.lista1techsieciowe.service.BookDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,21 +19,26 @@ public class BookDetailsController {
     }
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping("/add")
+    @PreAuthorize("hasRole('LIBRARIAN')")
+
     public @ResponseBody BookDetails addBookDetails(@RequestBody BookDetails bookDetails){
         return bookDetailsService.addBookDetails(bookDetails);
     }
 
     @GetMapping("/getAll")
+    @PreAuthorize("permitAll()")
     public @ResponseBody Iterable<BookDetails> getAllBookDetails(){
         return bookDetailsService.getAll();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public BookDetails getBookDetails(@PathVariable int id) {
         return bookDetailsService.getBookDetails(id);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('LIBRARIAN')")
     public void delete(@PathVariable int id) {
         bookDetailsService.deleteBookDetails(id);
     }

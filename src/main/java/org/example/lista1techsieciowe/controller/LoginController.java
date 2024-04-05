@@ -8,12 +8,14 @@ import org.example.lista1techsieciowe.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/auth")
+
 public class LoginController {
     private final LoginService loginService;
     @Autowired
@@ -22,19 +24,18 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<RegisterResponseDto> register(@RequestBody RegisterDto requestBody) {
-        RegisterResponseDto registerResponseDto = loginService.register(requestBody);
-        return new ResponseEntity<>(registerResponseDto, HttpStatus.CREATED);
+    @PreAuthorize("hasRole('LIBRARIAN')")
+    public ResponseEntity<RegisterResponseDto> register(@Validated @RequestBody RegisterDto requsetbody){
+        RegisterResponseDto dto = loginService.register(requsetbody);
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
 
 }
-    @PostMapping("/login")
+    @PostMapping("/log")
     @PreAuthorize("permitAll()")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginDto requestBody) {
         LoginResponseDto dto = loginService.log(requestBody);
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
 
     }
-
 
 }

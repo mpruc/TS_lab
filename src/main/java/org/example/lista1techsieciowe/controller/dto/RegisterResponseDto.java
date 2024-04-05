@@ -7,8 +7,6 @@ public class RegisterResponseDto {
     private String username;
     private UserRole role;
 
-
-
     public RegisterResponseDto(String username, UserRole role, Integer userId) {
         this.username = username;
         this.role = role;

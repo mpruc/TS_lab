@@ -1,5 +1,6 @@
 package org.example.lista1techsieciowe.service;
 
+import jakarta.transaction.Transactional;
 import org.example.lista1techsieciowe.controller.dto.LoginDto;
 import org.example.lista1techsieciowe.controller.dto.LoginResponseDto;
 import org.example.lista1techsieciowe.controller.dto.RegisterDto;
@@ -11,6 +12,8 @@ import org.example.lista1techsieciowe.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class LoginService {
@@ -25,7 +28,7 @@ public class LoginService {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
-    }
+     }
 
     public RegisterResponseDto register(RegisterDto registerDto) {
         User user = new User();
@@ -41,7 +44,7 @@ public class LoginService {
 
         return new RegisterResponseDto(login.getUsername(), login.getRole(), login.getLoginId());
 
-    }
+}
     public LoginResponseDto log (LoginDto dto) {
         Login login = loginRepository.findByUsername(dto.getUsername()).orElseThrow(RuntimeException :: new);
         if(!passwordEncoder.matches(dto.getPassword(), login.getPassword())) {

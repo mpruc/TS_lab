@@ -8,22 +8,25 @@ import java.util.List;
 @Table(name = "user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_Id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Integer userId;
 
-    @Basic
     @Column(name = "email")
-    private String email;
     @Basic
+    private String email;
+
     @Column(name = "name")
+    @Basic
     private String name;
+
     @OneToMany(mappedBy = "user")
     private List<Review> reviews;
+
     @OneToMany(mappedBy = "user")
     private List<Loan> loans;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Login login;
 
     public Login getLogin() {
