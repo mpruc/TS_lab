@@ -1,6 +1,5 @@
 package org.example.lista1techsieciowe.service;
 
-import jakarta.transaction.Transactional;
 import org.example.lista1techsieciowe.controller.dto.LoginDto;
 import org.example.lista1techsieciowe.controller.dto.LoginResponseDto;
 import org.example.lista1techsieciowe.controller.dto.RegisterDto;
@@ -33,13 +32,13 @@ public class LoginService {
     public RegisterResponseDto register(RegisterDto registerDto) {
         User user = new User();
         user.setEmail(registerDto.getEmail());
-        User newUser = userRepository.save(user);
+        userRepository.save(user);
 
         Login login = new Login();
         login.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         login.setUsername(registerDto.getUsername());
         login.setRole(registerDto.getRole());
-        login.setUser(newUser);
+        login.setUser(user);
         loginRepository.save(login);
 
         return new RegisterResponseDto(login.getUsername(), login.getRole(), login.getLoginId());

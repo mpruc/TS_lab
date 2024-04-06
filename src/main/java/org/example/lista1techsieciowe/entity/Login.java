@@ -8,7 +8,7 @@ import org.example.lista1techsieciowe.commonTypes.UserRole;
 public class Login {
     @Id
     @Column(name = "login_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer loginId;
 
     @Column(name = "username", unique = true, nullable = false)

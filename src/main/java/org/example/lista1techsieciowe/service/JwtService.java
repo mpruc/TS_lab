@@ -20,6 +20,7 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
+
     public String generateToken(Login logDetail) {
         return generateToken(new HashMap<>(), logDetail);
     }
@@ -36,7 +37,7 @@ public class JwtService {
     }
 
 
-    private Date extractDate(String token) {
+    private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
@@ -56,7 +57,7 @@ public class JwtService {
 
     private boolean isTokenExpired(String token) {
 
-        return extractDate(token).before(new Date());
+        return extractExpiration(token).before(new Date());
     }
 
     private String generateToken(Map<String, Object>extraClaims, Login logDetails) {
