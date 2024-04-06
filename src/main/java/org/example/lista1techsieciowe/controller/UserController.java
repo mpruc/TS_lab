@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
-
+@PreAuthorize("hasRole('LIBRARIAN')")
 public class UserController {
     private final UserService userService;
 
@@ -23,25 +23,21 @@ public class UserController {
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping("/add")
-    @PreAuthorize("hasRole('LIBRARIAN')")
     public @ResponseBody User addUser(@RequestBody User user){
         return userService.addUser(user);
     }
 
     @GetMapping("/getAll")
-    @PreAuthorize("hasRole('LIBRARIAN')")
     public @ResponseBody Iterable <User> getAllUsers(){
         return userService.getAll();
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('LIBRARIAN')")
     public User getUser(@PathVariable int id) {
         return userService.getUser(id);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('LIBRARIAN')")
     public void delete(@PathVariable int id) {
         userService.deleteUser(id);
     }
