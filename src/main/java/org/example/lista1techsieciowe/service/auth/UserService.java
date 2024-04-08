@@ -1,7 +1,5 @@
-package org.example.lista1techsieciowe.service;
-import org.example.lista1techsieciowe.entity.Book;
+package org.example.lista1techsieciowe.service.auth;
 import org.example.lista1techsieciowe.entity.User;
-import org.example.lista1techsieciowe.repository.BookRepository;
 import org.example.lista1techsieciowe.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

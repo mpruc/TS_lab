@@ -1,9 +1,9 @@
-package org.example.lista1techsieciowe.service;
+package org.example.lista1techsieciowe.service.bookDetails;
 
-import org.example.lista1techsieciowe.entity.Book;
 import org.example.lista1techsieciowe.entity.BookDetails;
 import org.example.lista1techsieciowe.repository.BookDetailsRepository;
-import org.example.lista1techsieciowe.repository.BookRepository;
+import org.example.lista1techsieciowe.service.book.exceptions.BookDoesntExistException;
+import org.example.lista1techsieciowe.service.bookDetails.exceptions.BookDetailsDoesntExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +20,16 @@ public class BookDetailsService {
         return (List<BookDetails>) bookDetailsRepository.findAll();
     }
 
-    public BookDetails getBookDetails(int id) {
-        return bookDetailsRepository.findById(id).orElseThrow(() -> new RuntimeException("Book details not found"));
+    public BookDetails getBookDetails(Integer id) {
+        return bookDetailsRepository.findById(id).orElseThrow(() -> BookDetailsDoesntExistException.create(id));
     }
     public BookDetails addBookDetails(BookDetails bookDetails) {
         return bookDetailsRepository.save(bookDetails);
     }
-    public void deleteBookDetails(int id) {
+    public void deleteBookDetails(Integer id) {
+        if (!bookDetailsRepository.existsById(id)) {
+            throw BookDoesntExistException.create(id);
+        }
         bookDetailsRepository.deleteById(id);
     }
 }

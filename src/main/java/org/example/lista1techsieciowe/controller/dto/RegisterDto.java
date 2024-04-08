@@ -1,11 +1,16 @@
 package org.example.lista1techsieciowe.controller.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import org.example.lista1techsieciowe.commonTypes.UserRole;
 
 public class RegisterDto {
+    @NotBlank
     private String password;
+    @NotBlank
     private UserRole role;
+    @NotBlank
     private String username;
+    @NotBlank
     private String email;
 
     public RegisterDto(String password, UserRole role, String username, String email) {

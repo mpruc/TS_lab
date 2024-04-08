@@ -11,21 +11,28 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "loan_id")
     private Integer loanId;
+
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
     @Basic
     @Column(name = "loan_date")
     private Date loanDate;
+
     @Basic
     @Column(name = "due_date")
     private Date dueDate;
+
     @Basic
     @Column(name = "return_date")
     private Date returnDate;
+
+
     public Integer getLoanId() {
         return loanId;
     }

@@ -1,10 +1,7 @@
 package org.example.lista1techsieciowe.controller;
 
-import org.example.lista1techsieciowe.entity.Book;
 import org.example.lista1techsieciowe.entity.User;
-import org.example.lista1techsieciowe.repository.BookRepository;
-import org.example.lista1techsieciowe.repository.UserRepository;
-import org.example.lista1techsieciowe.service.UserService;
+import org.example.lista1techsieciowe.service.auth.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;

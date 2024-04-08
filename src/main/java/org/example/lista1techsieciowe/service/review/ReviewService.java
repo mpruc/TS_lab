@@ -1,8 +1,9 @@
-package org.example.lista1techsieciowe.service;
+package org.example.lista1techsieciowe.service.review;
 
 import org.example.lista1techsieciowe.entity.Review;
-import org.example.lista1techsieciowe.entity.User;
 import org.example.lista1techsieciowe.repository.ReviewRepository;
+import org.example.lista1techsieciowe.service.book.exceptions.BookDoesntExistException;
+import org.example.lista1techsieciowe.service.review.exceptions.ReviewDoesntExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +21,17 @@ public class ReviewService {
         return (List<Review>) reviewRepository.findAll();
     }
 
-    public Review getReview(int id) {
-        return reviewRepository.findById(id).orElseThrow(() -> new RuntimeException("Review not found"));
+    public Review getReview(Integer id) {
+        return reviewRepository.findById(id).orElseThrow(() -> ReviewDoesntExistException.create(id));
     }
     public Review addReview(Review review) {
         return reviewRepository.save(review);
     }
-    public void deleteReview(int id) {
+
+    public void deleteReview(Integer id) {
+        if (!reviewRepository.existsById(id)) {
+            throw BookDoesntExistException.create(id);
+        }
         reviewRepository.deleteById(id);
     }
 

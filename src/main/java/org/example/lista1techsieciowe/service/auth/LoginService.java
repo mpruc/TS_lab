@@ -1,5 +1,7 @@
-package org.example.lista1techsieciowe.service;
+package org.example.lista1techsieciowe.service.auth;
 
+import jakarta.transaction.Transactional;
+import org.example.lista1techsieciowe.commonTypes.UserRole;
 import org.example.lista1techsieciowe.controller.dto.LoginDto;
 import org.example.lista1techsieciowe.controller.dto.LoginResponseDto;
 import org.example.lista1techsieciowe.controller.dto.RegisterDto;
@@ -8,6 +10,11 @@ import org.example.lista1techsieciowe.entity.Login;
 import org.example.lista1techsieciowe.entity.User;
 import org.example.lista1techsieciowe.repository.LoginRepository;
 import org.example.lista1techsieciowe.repository.UserRepository;
+import org.example.lista1techsieciowe.service.JwtService;
+import org.example.lista1techsieciowe.service.auth.exceptions.IncorrectPasswordException;
+import org.example.lista1techsieciowe.service.auth.exceptions.IncorrectRoleException;
+import org.example.lista1techsieciowe.service.auth.exceptions.UserAlreadyExistsException;
+import org.example.lista1techsieciowe.service.auth.exceptions.UserWithGivenLoginDoesntExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,8 +35,17 @@ public class LoginService {
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
      }
+    @Transactional
+     public RegisterResponseDto register(RegisterDto registerDto) {
+        Optional<Login> existingLogin = loginRepository.findByUsername(registerDto.getUsername());
 
-    public RegisterResponseDto register(RegisterDto registerDto) {
+        if(existingLogin.isPresent()) {
+            throw UserAlreadyExistsException.create(registerDto.getUsername());
+        }
+        if (!isValidRole(registerDto.getRole())) {
+            throw IncorrectRoleException.create();
+        }
+
         User user = new User();
         user.setEmail(registerDto.getEmail());
         userRepository.save(user);
@@ -45,11 +61,20 @@ public class LoginService {
 
 }
     public LoginResponseDto log (LoginDto dto) {
-        Login login = loginRepository.findByUsername(dto.getUsername()).orElseThrow(RuntimeException :: new);
+        Login login = loginRepository.findByUsername(dto.getUsername()).orElseThrow(()-> UserWithGivenLoginDoesntExistException.create(dto.getUsername()));
         if(!passwordEncoder.matches(dto.getPassword(), login.getPassword())) {
-            throw new RuntimeException();
+            throw IncorrectPasswordException.create();
         }
         String token = jwtService.generateToken(login);
         return new LoginResponseDto(token);
     }
+    private boolean isValidRole(UserRole role) {
+        for (UserRole availableRole : UserRole.values()) {
+            if (availableRole == role) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

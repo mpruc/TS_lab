@@ -1,8 +1,7 @@
 package org.example.lista1techsieciowe.controller;
 
 import org.example.lista1techsieciowe.entity.Review;
-import org.example.lista1techsieciowe.entity.User;
-import org.example.lista1techsieciowe.service.ReviewService;
+import org.example.lista1techsieciowe.service.review.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
