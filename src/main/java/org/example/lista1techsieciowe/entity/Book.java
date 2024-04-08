@@ -74,7 +74,7 @@ public class Book {
     public void setAvailableCopies(Integer availableCopies) {
         this.availableCopies = availableCopies;
     }
-    private Integer getBookId() {
+    public Integer getBookId() {
         return bookId;
     }
     public String getIsbn() {

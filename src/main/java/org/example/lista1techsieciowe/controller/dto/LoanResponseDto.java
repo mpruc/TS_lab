@@ -1,37 +1,23 @@
-package org.example.lista1techsieciowe.entity;
-
-import jakarta.persistence.*;
+package org.example.lista1techsieciowe.controller.dto;
 
 import java.sql.Date;
 
-@Entity
-@Table(name = "loan")
-public class Loan {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "loan_id")
+public class LoanResponseDto {
     private Integer loanId;
-
-    @ManyToOne
-    @JoinColumn(name = "book_id")
-    private Book book;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @Basic
-    @Column(name = "loan_date")
+    private Integer book;
+    private Integer user;
     private Date loanDate;
-
-    @Basic
-    @Column(name = "due_date")
     private Date dueDate;
-
-    @Basic
-    @Column(name = "return_date")
     private Date returnDate;
 
+    public LoanResponseDto(Integer loanId, Integer book, Integer user, Date loanDate, Date dueDate, Date returnDate) {
+        this.loanId = loanId;
+        this.book = book;
+        this.user = user;
+        this.loanDate = loanDate;
+        this.dueDate = dueDate;
+        this.returnDate = returnDate;
+    }
 
     public Integer getLoanId() {
         return loanId;
@@ -41,19 +27,19 @@ public class Loan {
         this.loanId = loanId;
     }
 
-    public Book getBook() {
+    public Integer getBook() {
         return book;
     }
 
-    public void setBook(Book book) {
+    public void setBook(Integer book) {
         this.book = book;
     }
 
-    public User getUser() {
+    public Integer getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(Integer user) {
         this.user = user;
     }
 
@@ -81,3 +67,5 @@ public class Loan {
         this.returnDate = returnDate;
     }
 }
+
+
