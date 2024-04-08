@@ -12,7 +12,6 @@ import org.example.lista1techsieciowe.repository.LoginRepository;
 import org.example.lista1techsieciowe.repository.UserRepository;
 import org.example.lista1techsieciowe.service.JwtService;
 import org.example.lista1techsieciowe.service.auth.exceptions.IncorrectPasswordException;
-import org.example.lista1techsieciowe.service.auth.exceptions.IncorrectRoleException;
 import org.example.lista1techsieciowe.service.auth.exceptions.UserAlreadyExistsException;
 import org.example.lista1techsieciowe.service.auth.exceptions.UserWithGivenLoginDoesntExistException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +41,6 @@ public class LoginService {
         if(existingLogin.isPresent()) {
             throw UserAlreadyExistsException.create(registerDto.getUsername());
         }
-        if (!isValidRole(registerDto.getRole())) {
-            throw IncorrectRoleException.create();
-        }
 
         User user = new User();
         user.setEmail(registerDto.getEmail());
@@ -68,13 +64,11 @@ public class LoginService {
         String token = jwtService.generateToken(login);
         return new LoginResponseDto(token);
     }
-    private boolean isValidRole(UserRole role) {
-        for (UserRole availableRole : UserRole.values()) {
-            if (availableRole == role) {
-                return true;
-            }
-        }
-        return false;
+    public void DeleteByUsername(String username) {
+        Login login = loginRepository.findByUsername(username).orElseThrow(() ->
+                UserWithGivenLoginDoesntExistException.create(username)
+        );
+        loginRepository.delete(login);
     }
 
 }

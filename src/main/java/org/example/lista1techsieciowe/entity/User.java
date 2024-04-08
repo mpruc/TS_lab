@@ -29,6 +29,7 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Login login;
 
+
     public Login getLogin() {
         return login;
     }

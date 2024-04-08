@@ -35,5 +35,13 @@ public class LoginController {
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
 
     }
+    @DeleteMapping("/{username}")
+    @PreAuthorize("hasRole('LIBRARIAN')")
+    public void delete(@PathVariable String username) {
+        loginService.DeleteByUsername(username);
+    }
 
 }
+
+
+

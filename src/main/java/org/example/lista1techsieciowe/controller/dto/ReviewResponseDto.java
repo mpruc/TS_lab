@@ -1,36 +1,26 @@
-package org.example.lista1techsieciowe.entity;
+package org.example.lista1techsieciowe.controller.dto;
 
-import jakarta.persistence.*;
+import org.example.lista1techsieciowe.entity.Book;
+import org.example.lista1techsieciowe.entity.User;
+
 import java.sql.Date;
-import java.util.List;
 
-@Entity
-@Table(name = "review")
-public class Review {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "review_id")
+public class ReviewResponseDto {
     private Integer reviewId;
-
-    @ManyToOne
-    @JoinColumn(name = "book_id")
     private Book book;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
     private User user;
-
-    @Basic
-    @Column(name = "grade")
-    private double grade;
-    @Basic
-    @Column(name = "comment")
+    private Double grade;
     private String comment;
-    @Basic
-    @Column(name = "review_date")
-
     private Date reviewDate;
 
+    public ReviewResponseDto(Integer reviewId, Book book, User user, Double grade, String comment, Date reviewDate) {
+        this.reviewId = reviewId;
+        this.book = book;
+        this.user = user;
+        this.grade = grade;
+        this.comment = comment;
+        this.reviewDate = reviewDate;
+    }
 
     public Integer getReviewId() {
         return reviewId;
@@ -56,11 +46,11 @@ public class Review {
         this.user = user;
     }
 
-    public double getGrade() {
+    public Double getGrade() {
         return grade;
     }
 
-    public void setGrade(double grade) {
+    public void setGrade(Double grade) {
         this.grade = grade;
     }
 

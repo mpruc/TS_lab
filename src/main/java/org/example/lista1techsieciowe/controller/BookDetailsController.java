@@ -1,5 +1,7 @@
 package org.example.lista1techsieciowe.controller;
 
+import org.example.lista1techsieciowe.controller.dto.BookDetailsDto;
+import org.example.lista1techsieciowe.controller.dto.BookDetailsResponseDto;
 import org.example.lista1techsieciowe.entity.BookDetails;
 import org.example.lista1techsieciowe.service.bookDetails.BookDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ public class BookDetailsController {
     @PostMapping("/add")
     @PreAuthorize("hasRole('LIBRARIAN')")
 
-    public @ResponseBody BookDetails addBookDetails(@RequestBody BookDetails bookDetails){
+    public @ResponseBody BookDetailsResponseDto addBookDetails(@RequestBody BookDetailsDto bookDetails){
         return bookDetailsService.addBookDetails(bookDetails);
     }
 

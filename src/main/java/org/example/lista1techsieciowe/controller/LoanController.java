@@ -1,5 +1,7 @@
 package org.example.lista1techsieciowe.controller;
 
+import org.example.lista1techsieciowe.controller.dto.LoanDto;
+import org.example.lista1techsieciowe.controller.dto.LoanResponseDto;
 import org.example.lista1techsieciowe.entity.Loan;
 import org.example.lista1techsieciowe.service.loan.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ public class LoanController {
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping("/add")
     @PreAuthorize("hasRole('LIBRARIAN')")
-    public @ResponseBody Loan addLoan(@RequestBody Loan loan){
+    public @ResponseBody LoanResponseDto addLoan(@RequestBody LoanDto loan){
         return loanService.addLoan(loan);
     }
 

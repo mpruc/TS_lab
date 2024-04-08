@@ -1,8 +1,10 @@
 package org.example.lista1techsieciowe.service.loan;
 
-import org.example.lista1techsieciowe.entity.Book;
+import org.example.lista1techsieciowe.controller.dto.LoanDto;
+import org.example.lista1techsieciowe.controller.dto.LoanResponseDto;
 import org.example.lista1techsieciowe.entity.Loan;
 import org.example.lista1techsieciowe.entity.User;
+import org.example.lista1techsieciowe.entity.Book;
 import org.example.lista1techsieciowe.repository.BookRepository;
 import org.example.lista1techsieciowe.repository.LoanRepository;
 import org.example.lista1techsieciowe.repository.UserRepository;
@@ -33,14 +35,28 @@ public class LoanService {
     public Loan getLoan(Integer id) {
         return loanRepository.findById(id).orElseThrow(() -> LoanDoesntExistException.create(id));
     }
-    public Loan addLoan(Loan loan) {
-        User user = userRepository.findById(loan.getUser().getUserId())
-                .orElseThrow(() -> UserWithGivenLoginDoesntExistException.create(loan.getUser().getLogin().getUsername()));
-                        Book book = bookRepository.findById(loan.getBook().getBookId())
-                .orElseThrow(() -> BookDoesntExistException.create(loan.getBook().getBookId()));
-        loan.setUser(user);
-        loan.setBook(book);
-        return loanRepository.save(loan);
+
+    public LoanResponseDto addLoan(LoanDto loan) {
+        User user = userRepository.findById(loan.getUser())
+                .orElseThrow(() -> UserWithGivenLoginDoesntExistException.create(String.valueOf(loan.getUser())));
+
+        Book book = bookRepository.findById(loan.getBook())
+                .orElseThrow(() -> BookDoesntExistException.create(loan.getBook()));
+
+        var loanEntity = new Loan();
+
+        loanEntity.setLoanDate(loan.getLoanDate());
+        loanEntity.setDueDate(loan.getDueDate());
+        loanEntity.setBook(book);
+        loanEntity.setUser(user);
+
+        var newLoan = loanRepository.save(loanEntity);
+        return new LoanResponseDto(newLoan.getLoanId(),
+                newLoan.getBook().getBookId(),
+                newLoan.getUser().getUserId(),
+                newLoan.getLoanDate(),
+                newLoan.getDueDate(),
+                newLoan.getReturnDate());
     }
 
     public void deleteLoan(Integer id) {
@@ -49,7 +65,4 @@ public class LoanService {
         }
         loanRepository.deleteById(id);
     }
-
-
-
 }

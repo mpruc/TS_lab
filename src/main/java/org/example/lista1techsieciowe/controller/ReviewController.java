@@ -1,5 +1,7 @@
 package org.example.lista1techsieciowe.controller;
 
+import org.example.lista1techsieciowe.controller.dto.ReviewDto;
+import org.example.lista1techsieciowe.controller.dto.ReviewResponseDto;
 import org.example.lista1techsieciowe.entity.Review;
 import org.example.lista1techsieciowe.service.review.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ public class ReviewController {
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping("/add")
     @PreAuthorize("permitAll()")
-    public @ResponseBody Review addReview(@RequestBody Review review){
+    public @ResponseBody ReviewResponseDto addReview(@RequestBody ReviewDto review){
         return reviewService.addReview(review);
     }
 

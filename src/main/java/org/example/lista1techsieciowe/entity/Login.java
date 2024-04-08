@@ -27,6 +27,7 @@ public class Login {
     @JoinColumn(name="user_id", nullable = false)
     private User user;
 
+
     public Integer getLoginId() {
         return loginId;
     }
