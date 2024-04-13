@@ -13,4 +13,3 @@ public class UserAlreadyExistsException extends RuntimeException {
         return new ResponseStatusException(HttpStatus.CONFLICT, exception.getMessage(), exception);
     }
 }
-// email required, czy uzytkownik istnieje, czy ksiazka, bookdetails itd istnieja, niepoprawne haslo, niepoprawna nazwa uztkownika

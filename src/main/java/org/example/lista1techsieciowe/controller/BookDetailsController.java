@@ -1,13 +1,15 @@
 package org.example.lista1techsieciowe.controller;
 
-import org.example.lista1techsieciowe.controller.dto.BookDetailsDto;
-import org.example.lista1techsieciowe.controller.dto.BookDetailsResponseDto;
-import org.example.lista1techsieciowe.entity.BookDetails;
+import org.example.lista1techsieciowe.controller.dto.bookDetails.BookDetailsDto;
+import org.example.lista1techsieciowe.controller.dto.bookDetails.BookDetailsResponseDto;
 import org.example.lista1techsieciowe.service.bookDetails.BookDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/bookDetails")
@@ -29,15 +31,19 @@ public class BookDetailsController {
 
     @GetMapping("/getAll")
     @PreAuthorize("permitAll()")
-    public @ResponseBody Iterable<BookDetails> getAllBookDetails(){
-        return bookDetailsService.getAll();
+    public ResponseEntity<List<BookDetailsResponseDto>> getAllBookDetails(){
+        List<BookDetailsResponseDto> dto = bookDetailsService.getAll();
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
+
 
     @GetMapping("/{id}")
     @PreAuthorize("permitAll()")
-    public BookDetails getBookDetails(@PathVariable int id) {
-        return bookDetailsService.getBookDetails(id);
+    public ResponseEntity<BookDetailsResponseDto>getBookDetails(@PathVariable Integer id){
+        BookDetailsResponseDto dto = bookDetailsService.getBookDetails(id);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
+
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('LIBRARIAN')")

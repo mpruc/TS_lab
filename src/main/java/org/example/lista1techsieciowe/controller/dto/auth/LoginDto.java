@@ -1,4 +1,4 @@
-package org.example.lista1techsieciowe.controller.dto;
+package org.example.lista1techsieciowe.controller.dto.auth;
 
 public class LoginDto {
     private String username;

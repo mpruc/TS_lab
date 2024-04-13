@@ -1,15 +1,21 @@
-package org.example.lista1techsieciowe.controller.dto;
+package org.example.lista1techsieciowe.controller.dto.loan;
+
+import jakarta.validation.constraints.NotNull;
 
 import java.sql.Date;
 
-public class LoanDto {
+public class CreateLoanDto {
+    @NotNull
     private Integer book;
+    @NotNull
     private Integer user;
+    @NotNull
     private Date loanDate;
+    @NotNull
     private Date dueDate;
     private Date returnDate;
 
-    public LoanDto(Integer book, Integer user, Date loanDate, Date dueDate, Date returnDate) {
+    public CreateLoanDto(Integer book, Integer user, Date loanDate, Date dueDate, Date returnDate) {
         this.book = book;
         this.user = user;
         this.loanDate = loanDate;

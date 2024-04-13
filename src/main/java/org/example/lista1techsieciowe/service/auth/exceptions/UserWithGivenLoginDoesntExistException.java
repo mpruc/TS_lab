@@ -9,7 +9,7 @@ public class UserWithGivenLoginDoesntExistException extends RuntimeException {
     }
     public static ResponseStatusException create(String username) {
         UserWithGivenLoginDoesntExistException exception = new UserWithGivenLoginDoesntExistException(String.format(("There is no user with username %s "), username));
-        return new ResponseStatusException(HttpStatus.CONFLICT, exception.getMessage(), exception);
+        return new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
     }
 }
 

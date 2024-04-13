@@ -11,7 +11,7 @@ public class BookDetails {
     @Column(name = "book_details_id")
     private Integer bookDetailsId;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;
 

@@ -1,22 +1,25 @@
-package org.example.lista1techsieciowe.controller.dto;
+package org.example.lista1techsieciowe.controller.dto.loan;
+
+import org.example.lista1techsieciowe.controller.dto.book.GetBookDto;
+import org.example.lista1techsieciowe.controller.dto.user.GetUserDto;
 
 import java.sql.Date;
 
-public class LoanResponseDto {
+public class GetLoanResponseDto {
     private Integer loanId;
-    private Integer book;
-    private Integer user;
+    private GetBookDto bookId;
+    private GetUserDto userId;
     private Date loanDate;
     private Date dueDate;
     private Date returnDate;
 
-    public LoanResponseDto(Integer loanId, Integer book, Integer user, Date loanDate, Date dueDate, Date returnDate) {
+    public GetLoanResponseDto(Integer loanId, GetBookDto bookId, GetUserDto userId, Date loanDate, Date dueDate, Date returnDate) {
         this.loanId = loanId;
-        this.book = book;
-        this.user = user;
+        this.bookId = bookId;
+        this.userId = userId;
         this.loanDate = loanDate;
         this.dueDate = dueDate;
-        this.returnDate = returnDate;
+        this.returnDate = this.returnDate;
     }
 
     public Integer getLoanId() {
@@ -27,20 +30,20 @@ public class LoanResponseDto {
         this.loanId = loanId;
     }
 
-    public Integer getBook() {
-        return book;
+    public GetBookDto getBookId() {
+        return bookId;
     }
 
-    public void setBook(Integer book) {
-        this.book = book;
+    public void setBookId(GetBookDto bookId) {
+        this.bookId = bookId;
     }
 
-    public Integer getUser() {
-        return user;
+    public GetUserDto getUser() {
+        return userId;
     }
 
-    public void setUser(Integer user) {
-        this.user = user;
+    public void setUser(GetUserDto user) {
+        this.userId = user;
     }
 
     public Date getLoanDate() {
@@ -67,5 +70,3 @@ public class LoanResponseDto {
         this.returnDate = returnDate;
     }
 }
-
-

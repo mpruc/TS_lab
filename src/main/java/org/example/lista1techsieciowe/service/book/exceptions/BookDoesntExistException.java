@@ -9,7 +9,7 @@ public class BookDoesntExistException extends RuntimeException {
     }
     public static ResponseStatusException create(Integer id) {
         BookDoesntExistException exception = new BookDoesntExistException(String.format("Book with id '%s' does not exist", id));
-        return new ResponseStatusException(HttpStatus.CONFLICT, exception.getMessage(), exception);
+        return new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
     }
 }
 

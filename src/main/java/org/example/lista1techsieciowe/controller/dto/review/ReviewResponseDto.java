@@ -1,5 +1,7 @@
-package org.example.lista1techsieciowe.controller.dto;
+package org.example.lista1techsieciowe.controller.dto.review;
 
+import org.example.lista1techsieciowe.controller.dto.book.GetBookDto;
+import org.example.lista1techsieciowe.controller.dto.user.GetUserDto;
 import org.example.lista1techsieciowe.entity.Book;
 import org.example.lista1techsieciowe.entity.User;
 
@@ -7,19 +9,35 @@ import java.sql.Date;
 
 public class ReviewResponseDto {
     private Integer reviewId;
-    private Book book;
-    private User user;
+    private GetBookDto book;
+    private GetUserDto user;
     private Double grade;
     private String comment;
     private Date reviewDate;
 
-    public ReviewResponseDto(Integer reviewId, Book book, User user, Double grade, String comment, Date reviewDate) {
+    public ReviewResponseDto(Integer reviewId, GetBookDto book, GetUserDto user, Double grade, String comment, Date reviewDate) {
         this.reviewId = reviewId;
         this.book = book;
         this.user = user;
         this.grade = grade;
         this.comment = comment;
         this.reviewDate = reviewDate;
+    }
+
+    public GetBookDto getBook() {
+        return book;
+    }
+
+    public void setBook(GetBookDto book) {
+        this.book = book;
+    }
+
+    public GetUserDto getUser() {
+        return user;
+    }
+
+    public void setUser(GetUserDto user) {
+        this.user = user;
     }
 
     public Integer getReviewId() {
@@ -30,21 +48,7 @@ public class ReviewResponseDto {
         this.reviewId = reviewId;
     }
 
-    public Book getBook() {
-        return book;
-    }
 
-    public void setBook(Book book) {
-        this.book = book;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public Double getGrade() {
         return grade;

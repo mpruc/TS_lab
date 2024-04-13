@@ -36,6 +36,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+//                        authorizationManagerRequestMatcherRegistry
+//                                .requestMatchers("/error").permitAll());
                 .build();
     }
 

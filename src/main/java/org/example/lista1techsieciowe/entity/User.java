@@ -12,6 +12,10 @@ public class User {
     @Column(name = "user_id")
     private Integer userId;
 
+    @Column(name = "username")
+    @Basic
+    private String username;
+
     @Column(name = "email")
     @Basic
     private String email;
@@ -20,15 +24,22 @@ public class User {
     @Basic
     private String name;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Loan> loans;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Login login;
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public Login getLogin() {
         return login;

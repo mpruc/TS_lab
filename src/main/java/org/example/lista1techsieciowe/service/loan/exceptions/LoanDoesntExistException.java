@@ -9,6 +9,6 @@ public class LoanDoesntExistException extends RuntimeException {
     }
     public static ResponseStatusException create(Integer id) {
         LoanDoesntExistException exception = new LoanDoesntExistException(String.format("Loan with id %s does not exist", id));
-        return new ResponseStatusException(HttpStatus.CONFLICT, exception.getMessage(), exception);
+        return new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
     }
 }
