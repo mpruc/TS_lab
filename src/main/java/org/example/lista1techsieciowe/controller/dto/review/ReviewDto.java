@@ -1,4 +1,4 @@
-package org.example.lista1techsieciowe.controller.dto;
+package org.example.lista1techsieciowe.controller.dto.review;
 
 import java.sql.Date;
 

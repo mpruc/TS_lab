@@ -13,9 +13,9 @@ public class Book {
     @JsonProperty("bookId")
     private Integer bookId;
 
-    @OneToOne(mappedBy = "book")
+    @OneToOne(mappedBy = "book", fetch = FetchType.LAZY)
     private BookDetails bookDetails;
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY )
     private List<Review> reviews;
     @OneToMany(mappedBy = "book")
     private List<Loan> loans;
@@ -33,7 +33,7 @@ public class Book {
     private String publisher;
     @Basic
     @Column(name = "year_of_publish")
-    private String yearOfPublish;
+    private Integer yearOfPublish;
     @Basic
     @Column(name = "available_copies")
     private Integer availableCopies;
@@ -68,7 +68,7 @@ public class Book {
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
     }
-    public void setYearOfPublish(String yearOfPublish) {
+    public void setYearOfPublish(Integer yearOfPublish) {
         this.yearOfPublish = yearOfPublish;
     }
     public void setAvailableCopies(Integer availableCopies) {
@@ -89,7 +89,7 @@ public class Book {
     public String getPublisher() {
         return publisher;
     }
-    public String getYearOfPublish() {
+    public Integer getYearOfPublish() {
         return yearOfPublish;
     }
     public Integer getAvailableCopies() {

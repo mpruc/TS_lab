@@ -1,28 +1,21 @@
-package org.example.lista1techsieciowe.controller.dto;
+package org.example.lista1techsieciowe.controller.dto.bookDetails;
 
-import org.example.lista1techsieciowe.entity.Book;
+import jakarta.validation.constraints.NotNull;
 
-public class BookDetailsResponseDto {
-    private Integer id;
+public class BookDetailsDto {
+    @NotNull
     private String genre;
+    @NotNull
     private String summary;
     private  String CoverImageURL;
+    @NotNull
     private Integer book;
 
-    public BookDetailsResponseDto(Integer id, String genre, String summary, String coverImageURL, Integer book) {
-        this.id = id;
+    public BookDetailsDto(String genre, String summary, String coverImageURL, Integer book) {
         this.genre = genre;
         this.summary = summary;
         CoverImageURL = coverImageURL;
         this.book = book;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getGenre() {
@@ -57,4 +50,3 @@ public class BookDetailsResponseDto {
         this.book = book;
     }
 }
-

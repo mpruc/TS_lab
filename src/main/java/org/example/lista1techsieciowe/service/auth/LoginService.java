@@ -1,11 +1,10 @@
 package org.example.lista1techsieciowe.service.auth;
 
 import jakarta.transaction.Transactional;
-import org.example.lista1techsieciowe.commonTypes.UserRole;
-import org.example.lista1techsieciowe.controller.dto.LoginDto;
-import org.example.lista1techsieciowe.controller.dto.LoginResponseDto;
-import org.example.lista1techsieciowe.controller.dto.RegisterDto;
-import org.example.lista1techsieciowe.controller.dto.RegisterResponseDto;
+import org.example.lista1techsieciowe.controller.dto.auth.LoginDto;
+import org.example.lista1techsieciowe.controller.dto.auth.LoginResponseDto;
+import org.example.lista1techsieciowe.controller.dto.auth.RegisterDto;
+import org.example.lista1techsieciowe.controller.dto.auth.RegisterResponseDto;
 import org.example.lista1techsieciowe.entity.Login;
 import org.example.lista1techsieciowe.entity.User;
 import org.example.lista1techsieciowe.repository.LoginRepository;

@@ -1,11 +1,10 @@
 package org.example.lista1techsieciowe.service.review;
 
-import org.example.lista1techsieciowe.controller.dto.BookDetailsDto;
-import org.example.lista1techsieciowe.controller.dto.BookDetailsResponseDto;
-import org.example.lista1techsieciowe.controller.dto.ReviewDto;
-import org.example.lista1techsieciowe.controller.dto.ReviewResponseDto;
+import org.example.lista1techsieciowe.controller.dto.book.GetBookDto;
+import org.example.lista1techsieciowe.controller.dto.review.ReviewDto;
+import org.example.lista1techsieciowe.controller.dto.review.ReviewResponseDto;
+import org.example.lista1techsieciowe.controller.dto.user.GetUserDto;
 import org.example.lista1techsieciowe.entity.Book;
-import org.example.lista1techsieciowe.entity.BookDetails;
 import org.example.lista1techsieciowe.entity.Review;
 import org.example.lista1techsieciowe.entity.User;
 import org.example.lista1techsieciowe.repository.BookRepository;
@@ -18,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
@@ -31,12 +31,31 @@ public class ReviewService {
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
     }
-    public List<Review> getAll() {
-        return (List<Review>) reviewRepository.findAll();
+    public List<ReviewResponseDto> getAll() {
+        List<Review> review = (List<Review>) reviewRepository.findAll();
+        return review.stream().map(this::mapReview).collect(Collectors.toList());
+
     }
 
-    public Review getReview(Integer id) {
-        return reviewRepository.findById(id).orElseThrow(() -> ReviewDoesntExistException.create(id));
+    public ReviewResponseDto getReview(Integer id) {
+        Review review = reviewRepository.findById(id)
+            .orElseThrow(() -> ReviewDoesntExistException.create(id));
+        return mapReview(review);
+    }
+    private ReviewResponseDto mapReview(Review review) {
+        GetUserDto user = new GetUserDto(
+                review.getUser().getUserId(),
+                review.getUser().getName(),
+                review.getUser().getEmail());
+        GetBookDto book = new GetBookDto(
+                review.getBook().getBookId(),
+                review.getBook().getIsbn(),
+                review.getBook().getPublisher(),
+                review.getBook().getAuthor(),
+                review.getBook().getTitle(),
+                review.getBook().getYearOfPublish(),
+                review.getBook().getAvailableCopies()>0);
+        return new ReviewResponseDto(review.getReviewId(), book, user, review.getGrade(), review.getComment(), review.getReviewDate());
     }
     public ReviewResponseDto addReview(ReviewDto review) {
         User user = userRepository.findById(review.getUser())
@@ -53,14 +72,24 @@ public class ReviewService {
         reviewEntity.setGrade(review.getGrade());
 
         var newReview = reviewRepository.save(reviewEntity);
-        return new ReviewResponseDto(newReview.getReviewId(),
-                newReview.getBook(),
-                newReview.getUser(),
-                newReview.getGrade(),
-                newReview.getComment(),
-                newReview.getReviewDate()
-                );
+
+        GetBookDto getBookDto = new GetBookDto(
+                book.getBookId(),
+                book.getIsbn(),
+                book.getPublisher(),
+                book.getAuthor(),
+                book.getTitle(),
+                book.getYearOfPublish(),
+                book.getAvailableCopies() > 0);
+
+        GetUserDto getUserDto = new GetUserDto(
+                user.getUserId(),
+                user.getName(),
+                user.getEmail());
+
+        return new ReviewResponseDto(newReview.getReviewId(), getBookDto, getUserDto, newReview.getGrade(), newReview.getComment(), newReview.getReviewDate());
     }
+
 
 
     public void deleteReview(Integer id) {

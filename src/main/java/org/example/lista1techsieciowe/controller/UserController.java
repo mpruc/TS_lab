@@ -1,6 +1,8 @@
 package org.example.lista1techsieciowe.controller;
 
-import org.example.lista1techsieciowe.entity.User;
+import org.example.lista1techsieciowe.controller.dto.user.CreateUserDto;
+import org.example.lista1techsieciowe.controller.dto.user.CreateUserResponseDto;
+import org.example.lista1techsieciowe.controller.dto.user.GetUserDto;
 import org.example.lista1techsieciowe.service.auth.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,17 +22,20 @@ public class UserController {
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping("/add")
-    public @ResponseBody User addUser(@RequestBody User user){
-        return userService.addUser(user);
+    public CreateUserResponseDto addUser(@RequestBody CreateUserDto dto){
+        return userService.addUser(dto);
     }
 
     @GetMapping("/getAll")
-    public @ResponseBody Iterable <User> getAllUsers(){
+    @PreAuthorize("hasRole('LIBRARIAN')")
+    public @ResponseBody Iterable <GetUserDto> getAllUsers(){
+
         return userService.getAll();
     }
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable int id) {
+    public GetUserDto getUser(@PathVariable Integer id) {
+
         return userService.getUser(id);
     }
 

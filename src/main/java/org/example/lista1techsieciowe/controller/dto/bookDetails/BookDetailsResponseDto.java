@@ -1,16 +1,26 @@
-package org.example.lista1techsieciowe.controller.dto;
+package org.example.lista1techsieciowe.controller.dto.bookDetails;
 
-public class BookDetailsDto {
+public class BookDetailsResponseDto {
+    private Integer id;
     private String genre;
     private String summary;
     private  String CoverImageURL;
     private Integer book;
 
-    public BookDetailsDto(String genre, String summary, String coverImageURL, Integer book) {
+    public BookDetailsResponseDto(Integer id, String genre, String summary, String coverImageURL, Integer book) {
+        this.id = id;
         this.genre = genre;
         this.summary = summary;
         CoverImageURL = coverImageURL;
         this.book = book;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getGenre() {
@@ -45,3 +55,4 @@ public class BookDetailsDto {
         this.book = book;
     }
 }
+

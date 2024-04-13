@@ -1,10 +1,15 @@
 package org.example.lista1techsieciowe.service.auth;
+import org.example.lista1techsieciowe.controller.dto.user.CreateUserDto;
+import org.example.lista1techsieciowe.controller.dto.user.CreateUserResponseDto;
+import org.example.lista1techsieciowe.controller.dto.user.GetUserDto;
 import org.example.lista1techsieciowe.entity.User;
 import org.example.lista1techsieciowe.repository.UserRepository;
+import org.example.lista1techsieciowe.service.auth.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -14,17 +19,39 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    public List<User> getAll() {
-        return (List<User>) userRepository.findAll();
+    public List<GetUserDto> getAll() {
+        List<User> user = (List<User>) userRepository.findAll();
+        return user.stream().map(this :: mapUser).collect(Collectors.toList());
     }
 
-    public User getUser(int id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    public GetUserDto getUser(Integer id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> UserNotFoundException.create(id));
+        return mapUser(user);
     }
-    public User addUser(User user) {
-        return userRepository.save(user);
+    private GetUserDto mapUser (User user) {
+        return new GetUserDto(
+                user.getUserId(),
+                user.getName(),
+                user.getEmail()
+        );
     }
-    public void deleteUser(int id) {
+
+    public CreateUserResponseDto addUser(CreateUserDto user) {
+        var userEntity = new User();
+        userEntity.setUsername(user.getUsername());
+        userEntity.setEmail(user.getEmail());
+        userEntity.setName(user.getName());
+
+        var newUser = userRepository.save(userEntity);
+        return new CreateUserResponseDto(
+                newUser.getUserId(),
+                newUser.getUsername(),
+                newUser.getEmail(),
+                newUser.getName()
+        );
+    }
+    public void deleteUser(Integer id) {
         userRepository.deleteById(id);
     }
 }

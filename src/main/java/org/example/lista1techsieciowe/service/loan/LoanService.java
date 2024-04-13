@@ -1,7 +1,10 @@
 package org.example.lista1techsieciowe.service.loan;
 
-import org.example.lista1techsieciowe.controller.dto.LoanDto;
-import org.example.lista1techsieciowe.controller.dto.LoanResponseDto;
+import org.example.lista1techsieciowe.controller.dto.book.GetBookDto;
+import org.example.lista1techsieciowe.controller.dto.loan.CreateLoanDto;
+import org.example.lista1techsieciowe.controller.dto.loan.CreateLoanResponseDto;
+import org.example.lista1techsieciowe.controller.dto.loan.GetLoanResponseDto;
+import org.example.lista1techsieciowe.controller.dto.user.GetUserDto;
 import org.example.lista1techsieciowe.entity.Loan;
 import org.example.lista1techsieciowe.entity.User;
 import org.example.lista1techsieciowe.entity.Book;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LoanService {
@@ -28,15 +32,30 @@ public class LoanService {
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
     }
-    public List<Loan> getAll() {
-
-        return (List<Loan>) loanRepository.findAll();
-    }
-    public Loan getLoan(Integer id) {
-        return loanRepository.findById(id).orElseThrow(() -> LoanDoesntExistException.create(id));
+    public List<GetLoanResponseDto> getAll() {
+        List<Loan> loan = (List<Loan>) loanRepository.findAll();
+        return loan.stream().map(this :: mapLoan).collect(Collectors.toList());
     }
 
-    public LoanResponseDto addLoan(LoanDto loan) {
+    public GetLoanResponseDto getLoan(Integer id) {
+        Loan loan = loanRepository.findById(id).orElseThrow(() -> LoanDoesntExistException.create(id));
+        return mapLoan(loan);
+    }
+
+    private GetLoanResponseDto mapLoan(Loan loan) {
+        GetUserDto user = new GetUserDto(loan.getUser().getUserId(), loan.getUser().getName(), loan.getUser().getEmail());
+        GetBookDto book = new GetBookDto(
+                loan.getBook().getBookId(),
+                loan.getBook().getIsbn(),
+                loan.getBook().getPublisher(),
+                loan.getBook().getAuthor(),
+                loan.getBook().getTitle(),
+                loan.getBook().getYearOfPublish(),
+                loan.getBook().getAvailableCopies()>0);
+        return new GetLoanResponseDto(loan.getLoanId(), book, user, loan.getLoanDate(), loan.getDueDate(), loan.getReturnDate());
+    }
+
+    public CreateLoanResponseDto addLoan(CreateLoanDto loan) {
         User user = userRepository.findById(loan.getUser())
                 .orElseThrow(() -> UserWithGivenLoginDoesntExistException.create(String.valueOf(loan.getUser())));
 
@@ -50,14 +69,18 @@ public class LoanService {
         loanEntity.setBook(book);
         loanEntity.setUser(user);
 
+
+        loanEntity.setReturnDate(loan.getReturnDate());
+
         var newLoan = loanRepository.save(loanEntity);
-        return new LoanResponseDto(newLoan.getLoanId(),
+        return new CreateLoanResponseDto(newLoan.getLoanId(),
                 newLoan.getBook().getBookId(),
                 newLoan.getUser().getUserId(),
                 newLoan.getLoanDate(),
                 newLoan.getDueDate(),
                 newLoan.getReturnDate());
     }
+
 
     public void deleteLoan(Integer id) {
         if (!loanRepository.existsById(id)) {

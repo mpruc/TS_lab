@@ -1,9 +1,9 @@
 package org.example.lista1techsieciowe.controller;
 
-import org.example.lista1techsieciowe.controller.dto.LoginDto;
-import org.example.lista1techsieciowe.controller.dto.LoginResponseDto;
-import org.example.lista1techsieciowe.controller.dto.RegisterDto;
-import org.example.lista1techsieciowe.controller.dto.RegisterResponseDto;
+import org.example.lista1techsieciowe.controller.dto.auth.LoginDto;
+import org.example.lista1techsieciowe.controller.dto.auth.LoginResponseDto;
+import org.example.lista1techsieciowe.controller.dto.auth.RegisterDto;
+import org.example.lista1techsieciowe.controller.dto.auth.RegisterResponseDto;
 import org.example.lista1techsieciowe.service.auth.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

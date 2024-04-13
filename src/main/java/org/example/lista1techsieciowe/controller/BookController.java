@@ -1,10 +1,13 @@
 package org.example.lista1techsieciowe.controller;
 
-import org.example.lista1techsieciowe.entity.Book;
+import org.example.lista1techsieciowe.controller.dto.book.CreateBookDto;
+import org.example.lista1techsieciowe.controller.dto.book.CreateBookResponseDto;
+import org.example.lista1techsieciowe.controller.dto.book.GetBookDto;
 import org.example.lista1techsieciowe.service.book.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,19 +25,20 @@ public class BookController {
     @PostMapping("/add")
     @PreAuthorize("hasRole('LIBRARIAN')")
 
-    public @ResponseBody Book addBook(@RequestBody Book book){
+    public @ResponseBody CreateBookResponseDto add(@RequestBody @Validated CreateBookDto book) {
         return bookService.addBook(book);
     }
 
     @GetMapping("/getAll")
     @PreAuthorize("permitAll()")
-    public @ResponseBody Iterable <Book> getAllBooks(){
+    public @ResponseBody Iterable <GetBookDto> getAllBooks(){
         return bookService.getAll();
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("permitAll()")
-    public Book getBook(@PathVariable int id) {
+    public GetBookDto getBook (@PathVariable Integer id) {
+
         return bookService.getBook(id);
     }
 

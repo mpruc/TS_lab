@@ -1,4 +1,4 @@
-package org.example.lista1techsieciowe.controller.dto;
+package org.example.lista1techsieciowe.controller.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import org.example.lista1techsieciowe.commonTypes.UserRole;
