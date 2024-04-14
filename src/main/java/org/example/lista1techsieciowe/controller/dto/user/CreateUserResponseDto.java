@@ -38,7 +38,7 @@ public class CreateUserResponseDto {
         this.name = name;
     }
 
-    public CreateUserResponseDto(Integer userId, String username, String email, String name) {
+    public CreateUserResponseDto(Integer userId, String username, String email) {
         this.userId = userId;
         this.username = username;
         this.email = email;

@@ -1,10 +1,15 @@
 package org.example.lista1techsieciowe.controller;
 
+import org.example.lista1techsieciowe.controller.dto.bookDetails.BookDetailsDto;
+import org.example.lista1techsieciowe.controller.dto.bookDetails.BookDetailsResponseDto;
 import org.example.lista1techsieciowe.controller.dto.loan.GetLoanResponseDto;
 import org.example.lista1techsieciowe.controller.dto.review.ReviewDto;
 import org.example.lista1techsieciowe.controller.dto.review.ReviewResponseDto;
 import org.example.lista1techsieciowe.entity.Review;
+import org.example.lista1techsieciowe.security.JWTTokenFilter;
+import org.example.lista1techsieciowe.service.auth.exceptions.UnauthorizedException;
 import org.example.lista1techsieciowe.service.review.ReviewService;
+import org.example.lista1techsieciowe.service.review.exceptions.ReviewDoesntExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +19,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/review")
+@PreAuthorize("isAuthenticated()")
 
 public class ReviewController {
     private final ReviewService reviewService;
@@ -49,8 +54,16 @@ public class ReviewController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('LIBRARIAN')")
-    public void delete(@PathVariable int id) {
+    public void delete(@PathVariable Integer id) {
         reviewService.deleteReview(id);
     }
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @PostMapping("/update/{id}")
+//    @PreAuthorize("hasRole('LIBRARIAN')") DODAĆ ZE TYLKO TEN KTO NAPISAL
+    public ResponseEntity<ReviewResponseDto> updateReview(@PathVariable Integer id, @RequestBody @Validated ReviewDto updatedReview) {
+        ReviewResponseDto dto = reviewService.updateReview(id, updatedReview);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
 
 }

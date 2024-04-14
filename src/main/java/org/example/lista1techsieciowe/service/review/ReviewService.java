@@ -8,28 +8,35 @@ import org.example.lista1techsieciowe.entity.Book;
 import org.example.lista1techsieciowe.entity.Review;
 import org.example.lista1techsieciowe.entity.User;
 import org.example.lista1techsieciowe.repository.BookRepository;
+import org.example.lista1techsieciowe.repository.LoginRepository;
 import org.example.lista1techsieciowe.repository.ReviewRepository;
 import org.example.lista1techsieciowe.repository.UserRepository;
+import org.example.lista1techsieciowe.service.auth.OwnershipService;
+import org.example.lista1techsieciowe.service.auth.exceptions.UnauthorizedException;
+import org.example.lista1techsieciowe.service.auth.exceptions.UserNotFoundException;
 import org.example.lista1techsieciowe.service.auth.exceptions.UserWithGivenLoginDoesntExistException;
 import org.example.lista1techsieciowe.service.book.exceptions.BookDoesntExistException;
 import org.example.lista1techsieciowe.service.review.exceptions.ReviewDoesntExistException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ReviewService {
+public class ReviewService extends OwnershipService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private final LoginRepository loginRepository;
     @Autowired
-    public ReviewService(ReviewRepository reviewRepository, UserRepository userRepository, BookRepository bookRepository) {
-
+    public ReviewService  (ReviewRepository reviewRepository, UserRepository userRepository, BookRepository bookRepository, LoginRepository loginRepository) {
+        super(loginRepository);
         this.reviewRepository = reviewRepository;
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
+        this.loginRepository = loginRepository;
     }
     public List<ReviewResponseDto> getAll() {
         List<Review> review = (List<Review>) reviewRepository.findAll();
@@ -44,7 +51,7 @@ public class ReviewService {
     }
     private ReviewResponseDto mapReview(Review review) {
         GetUserDto user = new GetUserDto(
-                review.getUser().getUserId(),
+                review.getUser().getId(),
                 review.getUser().getName(),
                 review.getUser().getEmail());
         GetBookDto book = new GetBookDto(
@@ -83,15 +90,12 @@ public class ReviewService {
                 book.getAvailableCopies() > 0);
 
         GetUserDto getUserDto = new GetUserDto(
-                user.getUserId(),
+                user.getId(),
                 user.getName(),
                 user.getEmail());
 
         return new ReviewResponseDto(newReview.getReviewId(), getBookDto, getUserDto, newReview.getGrade(), newReview.getComment(), newReview.getReviewDate());
     }
-
-
-
     public void deleteReview(Integer id) {
         if (!reviewRepository.existsById(id)) {
             throw BookDoesntExistException.create(id);
@@ -99,4 +103,21 @@ public class ReviewService {
         reviewRepository.deleteById(id);
     }
 
+
+    public ReviewResponseDto updateReview(Integer id, ReviewDto updatedReview) {
+        Review existingReview = reviewRepository.findById(id).orElseThrow(() -> ReviewDoesntExistException.create(id));
+        Book book = bookRepository.findById(updatedReview.getBook())
+                .orElseThrow(() -> BookDoesntExistException.create(updatedReview.getBook()));
+        User user = userRepository.findById(updatedReview.getUser())
+                .orElseThrow(() -> UserNotFoundException.create(updatedReview.getUser()));
+
+        existingReview.setBook(book);
+        existingReview.setUser(user);
+        existingReview.setGrade(updatedReview.getGrade());
+        existingReview.setComment(updatedReview.getComment());
+        existingReview.setReviewDate(updatedReview.getReviewDate());
+
+        Review savedReview = reviewRepository.save(existingReview);
+        return mapReview(savedReview);
+    }
 }

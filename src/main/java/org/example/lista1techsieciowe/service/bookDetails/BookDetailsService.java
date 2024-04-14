@@ -1,5 +1,7 @@
 package org.example.lista1techsieciowe.service.bookDetails;
 
+import org.example.lista1techsieciowe.controller.dto.book.CreateBookDto;
+import org.example.lista1techsieciowe.controller.dto.book.CreateBookResponseDto;
 import org.example.lista1techsieciowe.controller.dto.bookDetails.BookDetailsDto;
 import org.example.lista1techsieciowe.controller.dto.bookDetails.BookDetailsResponseDto;
 import org.example.lista1techsieciowe.controller.dto.book.GetBookDto;
@@ -70,6 +72,22 @@ public class BookDetailsService {
             throw BookDetailsDoesntExistException.create(id);
         }
         bookDetailsRepository.deleteById(id);
+    }
+
+    public BookDetailsResponseDto updateBookDetails(Integer id, BookDetailsDto updatedBookDetails) {
+        BookDetails existingBookDetails = bookDetailsRepository.findById(id)
+                .orElseThrow(() -> BookDetailsDoesntExistException.create(id));
+        Book book = bookRepository.findById(updatedBookDetails.getBook())
+                .orElseThrow(() -> BookDoesntExistException.create(updatedBookDetails.getBook()));
+
+        existingBookDetails.setGenre(updatedBookDetails.getGenre());
+        existingBookDetails.setSummary(updatedBookDetails.getSummary());
+        existingBookDetails.setCoverImageUrl(updatedBookDetails.getCoverImageURL());
+        existingBookDetails.setBook(book);
+
+        BookDetails savedBookDetails = bookDetailsRepository.save(existingBookDetails);
+        return mapBookDetails(savedBookDetails);
+
     }
 }
 

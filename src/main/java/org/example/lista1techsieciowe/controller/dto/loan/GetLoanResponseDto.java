@@ -19,7 +19,7 @@ public class GetLoanResponseDto {
         this.userId = userId;
         this.loanDate = loanDate;
         this.dueDate = dueDate;
-        this.returnDate = this.returnDate;
+        this.returnDate = returnDate;
     }
 
     public Integer getLoanId() {

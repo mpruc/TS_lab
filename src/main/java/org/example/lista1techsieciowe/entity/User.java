@@ -1,6 +1,5 @@
 package org.example.lista1techsieciowe.entity;
 import jakarta.persistence.*;
-import org.example.lista1techsieciowe.commonTypes.UserRole;
 
 import java.util.List;
 
@@ -8,13 +7,13 @@ import java.util.List;
 @Table(name = "user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Integer userId;
+    private Integer id;
 
-    @Column(name = "username")
-    @Basic
-    private String username;
+//    @Column(name = "username")
+//    @Basic
+//    private String username;
 
     @Column(name = "email")
     @Basic
@@ -33,13 +32,13 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Login login;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
+//    public String getUsername() {
+//        return username;
+//    }
+//
+//    public void setUsername(String username) {
+//        this.username = username;
+//    }
 
     public Login getLogin() {
         return login;
@@ -65,8 +64,8 @@ public class User {
         this.reviews = reviews;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setId(Integer userId) {
+        this.id = userId;
     }
 
     public void setEmail(String email) {
@@ -77,8 +76,8 @@ public class User {
         this.name = name;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public Integer getId() {
+        return id;
     }
 
     public String getEmail() {

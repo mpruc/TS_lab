@@ -32,9 +32,9 @@ public class LoginService {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
-     }
+    }
     @Transactional
-     public RegisterResponseDto register(RegisterDto registerDto) {
+    public RegisterResponseDto register(RegisterDto registerDto) {
         Optional<Login> existingLogin = loginRepository.findByUsername(registerDto.getUsername());
 
         if(existingLogin.isPresent()) {
@@ -43,6 +43,7 @@ public class LoginService {
 
         User user = new User();
         user.setEmail(registerDto.getEmail());
+        user.setName(registerDto.getName());
         userRepository.save(user);
 
         Login login = new Login();
@@ -53,8 +54,8 @@ public class LoginService {
         loginRepository.save(login);
 
         return new RegisterResponseDto(login.getUsername(), login.getRole(), login.getLoginId());
+    }
 
-}
     public LoginResponseDto log (LoginDto dto) {
         Login login = loginRepository.findByUsername(dto.getUsername()).orElseThrow(()-> UserWithGivenLoginDoesntExistException.create(dto.getUsername()));
         if(!passwordEncoder.matches(dto.getPassword(), login.getPassword())) {

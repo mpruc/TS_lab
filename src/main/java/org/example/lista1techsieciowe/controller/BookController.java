@@ -6,6 +6,7 @@ import org.example.lista1techsieciowe.controller.dto.book.GetBookDto;
 import org.example.lista1techsieciowe.service.book.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -42,9 +43,18 @@ public class BookController {
         return bookService.getBook(id);
     }
 
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('LIBRARIAN')")
     public void delete(@PathVariable int id) {
         bookService.deleteBook(id);
+    }
+
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @PostMapping("/update/{id}")
+    @PreAuthorize("hasRole('LIBRARIAN')")
+    public ResponseEntity<CreateBookResponseDto> updateBook(@PathVariable Integer id, @RequestBody @Validated CreateBookDto updatedBook) {
+        CreateBookResponseDto updatedBookResponse = bookService.updateBook(id, updatedBook);
+        return ResponseEntity.ok(updatedBookResponse);
     }
 }
