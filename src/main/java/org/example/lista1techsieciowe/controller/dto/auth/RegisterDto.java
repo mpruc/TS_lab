@@ -11,13 +11,24 @@ public class RegisterDto {
     @NotBlank
     private String username;
     @NotBlank
+    private String name;
+    @NotBlank
     private String email;
 
-    public RegisterDto(String password, UserRole role, String username, String email) {
+    public RegisterDto(String password, UserRole role, String username, String name, String email) {
         this.password = password;
         this.role = role;
         this.username = username;
+        this.name = name;
         this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {

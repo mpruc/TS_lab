@@ -1,5 +1,7 @@
 package org.example.lista1techsieciowe.controller;
 
+import org.example.lista1techsieciowe.controller.dto.bookDetails.BookDetailsDto;
+import org.example.lista1techsieciowe.controller.dto.bookDetails.BookDetailsResponseDto;
 import org.example.lista1techsieciowe.controller.dto.loan.CreateLoanDto;
 import org.example.lista1techsieciowe.controller.dto.loan.CreateLoanResponseDto;
 import org.example.lista1techsieciowe.controller.dto.loan.GetLoanResponseDto;
@@ -32,9 +34,8 @@ public class LoanController {
     }
 
     @GetMapping("/getAll")
-    @PreAuthorize("hasRole('LIBRARIAN')")
-    public ResponseEntity<List<GetLoanResponseDto>> getALl() {
-        List<GetLoanResponseDto> dto = loanService.getAll();
+    public ResponseEntity<List<GetLoanResponseDto>> getALl(@RequestParam (required = false) Integer userId) {
+        List<GetLoanResponseDto> dto = loanService.getAll(userId);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
@@ -48,5 +49,13 @@ public class LoanController {
     @PreAuthorize("hasRole('LIBRARIAN')")
     public void delete(@PathVariable int id) {
         loanService.deleteLoan(id);
+    }
+
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @PostMapping("/update/{id}")
+    @PreAuthorize("hasRole('LIBRARIAN')")
+    public ResponseEntity<CreateLoanResponseDto> updateLoan(@PathVariable Integer id, @RequestBody @Validated CreateLoanDto updatedLoan) {
+        CreateLoanResponseDto dto = loanService.updateLoan(id, updatedLoan);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 }

@@ -72,4 +72,32 @@ public class BookService {
         }
         bookRepository.deleteById(id);
     }
+
+    public CreateBookResponseDto updateBook(Integer id, CreateBookDto updatedBook) {
+
+        Book existingBook = bookRepository.findById(id)
+                .orElseThrow(()-> BookDoesntExistException.create(id));
+
+        existingBook.setIsbn(updatedBook.getIsbn());
+        existingBook.setTitle(updatedBook.getTitle());
+        existingBook.setAuthor(updatedBook.getAuthor());
+        existingBook.setYearOfPublish(updatedBook.getYearOfPublish());
+        existingBook.setPublisher(updatedBook.getPublisher());
+        existingBook.setAvailableCopies(updatedBook.getAvailableCopies());
+
+        Book savedBook = bookRepository.save(existingBook);
+
+        return mapToCreateBookResponseDto(savedBook);
+    }
+    private CreateBookResponseDto mapToCreateBookResponseDto(Book book) {
+        return new CreateBookResponseDto(
+                book.getBookId(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getIsbn(),
+                book.getPublisher(),
+                book.getYearOfPublish(),
+                book.getAvailableCopies()
+        );
+    }
 }

@@ -1,5 +1,7 @@
 package org.example.lista1techsieciowe.controller;
 
+import org.example.lista1techsieciowe.controller.dto.book.CreateBookDto;
+import org.example.lista1techsieciowe.controller.dto.book.CreateBookResponseDto;
 import org.example.lista1techsieciowe.controller.dto.bookDetails.BookDetailsDto;
 import org.example.lista1techsieciowe.controller.dto.bookDetails.BookDetailsResponseDto;
 import org.example.lista1techsieciowe.service.bookDetails.BookDetailsService;
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,10 +47,16 @@ public class BookDetailsController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('LIBRARIAN')")
     public void delete(@PathVariable int id) {
         bookDetailsService.deleteBookDetails(id);
+    }
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @PostMapping("/update/{id}")
+    @PreAuthorize("hasRole('LIBRARIAN')")
+    public ResponseEntity<BookDetailsResponseDto> updateBookDetails(@PathVariable Integer id, @RequestBody @Validated BookDetailsDto updatedBookDetails) {
+        BookDetailsResponseDto dto = bookDetailsService.updateBookDetails(id, updatedBookDetails);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 }
