@@ -4,6 +4,8 @@ import org.example.lista1techsieciowe.controller.dto.auth.LoginDto;
 import org.example.lista1techsieciowe.controller.dto.auth.LoginResponseDto;
 import org.example.lista1techsieciowe.controller.dto.auth.RegisterDto;
 import org.example.lista1techsieciowe.controller.dto.auth.RegisterResponseDto;
+import org.example.lista1techsieciowe.controller.dto.loan.CreateLoanDto;
+import org.example.lista1techsieciowe.controller.dto.loan.CreateLoanResponseDto;
 import org.example.lista1techsieciowe.controller.dto.user.CreateUserDto;
 import org.example.lista1techsieciowe.controller.dto.user.CreateUserResponseDto;
 import org.example.lista1techsieciowe.service.auth.LoginService;
@@ -42,6 +44,14 @@ public class LoginController {
     @PreAuthorize("hasRole('LIBRARIAN')")
     public void delete(@PathVariable String username) {
         loginService.DeleteByUsername(username);
+    }
+
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @PostMapping("/update/{id}")
+    @PreAuthorize("hasRole('LIBRARIAN')")
+    public ResponseEntity<RegisterResponseDto> updateLogin(@PathVariable Integer id, @RequestBody @Validated RegisterDto updatedLogin) {
+        RegisterResponseDto dto = loginService.updateLogin(id, updatedLogin);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
 }

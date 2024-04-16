@@ -1,5 +1,6 @@
 package org.example.lista1techsieciowe.service.review;
 
+import org.example.lista1techsieciowe.commonTypes.UserRole;
 import org.example.lista1techsieciowe.controller.dto.book.GetBookDto;
 import org.example.lista1techsieciowe.controller.dto.review.ReviewDto;
 import org.example.lista1techsieciowe.controller.dto.review.ReviewResponseDto;
@@ -30,8 +31,9 @@ public class ReviewService extends OwnershipService {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
     private final LoginRepository loginRepository;
+
     @Autowired
-    public ReviewService  (ReviewRepository reviewRepository, UserRepository userRepository, BookRepository bookRepository, LoginRepository loginRepository) {
+    public ReviewService(ReviewRepository reviewRepository, UserRepository userRepository, BookRepository bookRepository, LoginRepository loginRepository) {
         super(loginRepository);
         this.reviewRepository = reviewRepository;
         this.userRepository = userRepository;
@@ -96,20 +98,32 @@ public class ReviewService extends OwnershipService {
 
         return new ReviewResponseDto(newReview.getReviewId(), getBookDto, getUserDto, newReview.getGrade(), newReview.getComment(), newReview.getReviewDate());
     }
-    public void deleteReview(Integer id) {
+    @PreAuthorize("hasRole('LIBRARIAN') or isAuthenticated() and @ownershipService.isOwner(authentication.name, #userId)")
+    public void deleteReview(Integer id, Integer userId) {
         if (!reviewRepository.existsById(id)) {
-            throw BookDoesntExistException.create(id);
+            throw ReviewDoesntExistException.create(id);
         }
-        reviewRepository.deleteById(id);
+
+        Review review = reviewRepository.findById(id).orElseThrow(() -> ReviewDoesntExistException.create(id));
+
+        if (isOwner(review.getUser().getLogin().getUsername(), userId) || review.getUser().getLogin().getRole() == UserRole.ROLE_LIBRARIAN) {
+            reviewRepository.deleteById(id);
+        } else {
+            throw UnauthorizedException.create();
+        }
     }
 
-
-    public ReviewResponseDto updateReview(Integer id, ReviewDto updatedReview) {
+    @PreAuthorize("isAuthenticated() and @ownershipService.isOwner(authentication.name, #userId)")
+    public ReviewResponseDto updateReview(Integer id, ReviewDto updatedReview, Integer userId) {
         Review existingReview = reviewRepository.findById(id).orElseThrow(() -> ReviewDoesntExistException.create(id));
         Book book = bookRepository.findById(updatedReview.getBook())
                 .orElseThrow(() -> BookDoesntExistException.create(updatedReview.getBook()));
         User user = userRepository.findById(updatedReview.getUser())
                 .orElseThrow(() -> UserNotFoundException.create(updatedReview.getUser()));
+
+        if (!isOwner(existingReview.getUser().getLogin().getUsername(), userId)) {
+            throw UnauthorizedException.create();
+        }
 
         existingReview.setBook(book);
         existingReview.setUser(user);

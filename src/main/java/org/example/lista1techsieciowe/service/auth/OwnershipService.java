@@ -27,17 +27,18 @@ public class OwnershipService {
 
         Login login = loginRepository.findById(userId)
                 .orElseThrow(() -> UserNotFoundException.create(userId));
-        return userId == login.getUser().getId();
+        return userId.equals(login.getUser().getId());
 
     }
-    public boolean isReviewOwner(Integer userId, Integer reviewUserId) {
-        return userId.equals(reviewUserId);
-    }
-    public boolean isLibrarian(Integer userId) {
-        Login login = loginRepository.findById(userId)
-                .orElseThrow(() -> UserNotFoundException.create(userId));
-        return login.getRole() == UserRole.ROLE_LIBRARIAN;
-    }
+    public boolean isOwner(String username, Integer userId) {
+        if (username == null || userId == null) {
+            return false;
+        }
 
+        Login login = loginRepository.findByUsername(username)
+                .orElseThrow(() -> UserWithGivenLoginDoesntExistException.create(username));
+        Integer loggedInUserId = login.getUser().getId();
 
+        return userId.equals(loggedInUserId);
+    }
 }

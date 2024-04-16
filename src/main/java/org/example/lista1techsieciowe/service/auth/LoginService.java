@@ -12,6 +12,7 @@ import org.example.lista1techsieciowe.repository.UserRepository;
 import org.example.lista1techsieciowe.service.JwtService;
 import org.example.lista1techsieciowe.service.auth.exceptions.IncorrectPasswordException;
 import org.example.lista1techsieciowe.service.auth.exceptions.UserAlreadyExistsException;
+import org.example.lista1techsieciowe.service.auth.exceptions.UserNotFoundException;
 import org.example.lista1techsieciowe.service.auth.exceptions.UserWithGivenLoginDoesntExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -71,4 +72,16 @@ public class LoginService {
         loginRepository.delete(login);
     }
 
+    public RegisterResponseDto updateLogin(Integer id, RegisterDto updatedLogin) {
+        Login existingLogin = loginRepository.findById(id).
+                orElseThrow(()-> UserNotFoundException.create(id));
+        User user = existingLogin.getUser();
+
+        existingLogin.setPassword(updatedLogin.getPassword());
+        existingLogin.setRole(updatedLogin.getRole());
+        existingLogin.setUsername(updatedLogin.getUsername());
+
+        Login savedLogin = loginRepository.save(existingLogin);
+        return new RegisterResponseDto(savedLogin.getUsername(), savedLogin.getRole(), user.getId());
+    }
 }
