@@ -1,10 +1,15 @@
 package org.example.lista1techsieciowe.controller.dto.loan;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.sql.Date;
 
 public class CreateLoanResponseDto {
+    @Schema(name = "loanId", example ="1" )
     private Integer loanId;
+    @Schema(name = "book", example ="1" )
     private Integer book;
+    @Schema(name = "user", example ="1" )
     private Integer user;
     private Date loanDate;
     private Date dueDate;

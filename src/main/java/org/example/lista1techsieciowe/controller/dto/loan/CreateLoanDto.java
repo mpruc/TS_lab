@@ -1,17 +1,22 @@
 package org.example.lista1techsieciowe.controller.dto.loan;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
 import java.sql.Date;
 
 public class CreateLoanDto {
     @NotNull
+    @Schema(name = "book", example ="1" )
     private Integer book;
+    @Schema(name = "user", example ="1" )
     @NotNull
     private Integer user;
     @NotNull
+    @Schema(name = "loan date", example ="2024-01-01" )
     private Date loanDate;
     @NotNull
+    @Schema(name = "due date", example ="2024-02-01" )
     private Date dueDate;
     private Date returnDate;
 

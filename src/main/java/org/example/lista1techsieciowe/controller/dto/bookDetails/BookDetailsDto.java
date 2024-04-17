@@ -1,20 +1,22 @@
 package org.example.lista1techsieciowe.controller.dto.bookDetails;
 
-import jakarta.validation.constraints.NotNull;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class BookDetailsDto {
-    @NotNull
+    @Schema(name = "genre", example ="fantasy" )
     private String genre;
-    @NotNull
+    @Schema(name = "summary", example ="summary" )
     private String summary;
-    private  String CoverImageURL;
-    @NotNull
+    @Schema(name = "book", example ="1" )
     private Integer book;
+
+    @Schema(name = "coverImageURL", example ="url" )
+    private  String coverImageURL;
 
     public BookDetailsDto(String genre, String summary, String coverImageURL, Integer book) {
         this.genre = genre;
         this.summary = summary;
-        CoverImageURL = coverImageURL;
+        this.coverImageURL = coverImageURL;
         this.book = book;
     }
 
@@ -35,11 +37,11 @@ public class BookDetailsDto {
     }
 
     public String getCoverImageURL() {
-        return CoverImageURL;
+        return coverImageURL;
     }
 
     public void setCoverImageURL(String coverImageURL) {
-        CoverImageURL = coverImageURL;
+        this.coverImageURL = coverImageURL;
     }
 
     public Integer getBook() {

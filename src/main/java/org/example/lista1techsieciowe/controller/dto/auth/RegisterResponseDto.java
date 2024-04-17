@@ -1,10 +1,14 @@
 package org.example.lista1techsieciowe.controller.dto.auth;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.example.lista1techsieciowe.commonTypes.UserRole;
 
 public class RegisterResponseDto {
+    @Schema(name="userId", example = "1")
     private Integer userId;
+    @Schema(name= "username", example = "username")
     private String username;
+    @Schema(name = "role", example = "ROLE_READER")
     private UserRole role;
 
     public RegisterResponseDto(String username, UserRole role, Integer userId) {

@@ -1,8 +1,14 @@
 package org.example.lista1techsieciowe.controller.dto.user;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+
 public class CreateUserDto {
+    @Schema(name = "username", example = "username")
     private String username;
+    @Schema(name = "email", example = "example@email.com")
     private String email;
+    @Schema(name = "name", example ="name")
     private String name;
 
     public String getUsername() {

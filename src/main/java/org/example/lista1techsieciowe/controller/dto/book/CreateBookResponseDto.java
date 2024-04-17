@@ -1,12 +1,28 @@
 package org.example.lista1techsieciowe.controller.dto.book;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class CreateBookResponseDto {
+
+    @Schema(name = "id", example = "1")
     private Integer id;
+
+    @Schema(name = "title", example ="Title" )
     private String title;
+
+    @Schema(name = "author", example ="author" )
     private String author;
+
+    @Schema(name = "isbn", example ="9781234567890" )
     private String isbn;
+
+    @Schema(name = "publisher", example ="Publisher" )
     private String publisher;
+
+    @Schema(name = "yearOfPublish", example ="2024" )
     private Integer yearOfPublish;
+
+    @Schema(name = "availableCopies", example ="10" )
     private Integer availableCopies;
 
     public CreateBookResponseDto(Integer id, String title, String author, String isbn, String publisher, Integer yearOfPublish, Integer availableCopies) {
