@@ -53,13 +53,12 @@ public class ReviewController {
 
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('LIBRARIAN')")
     public void delete(@PathVariable Integer id) {
         reviewService.deleteReview(id);
     }
-    @ResponseStatus(code = HttpStatus.CREATED)
+
+
     @PostMapping("/update/{id}")
-//    @PreAuthorize("hasRole('LIBRARIAN')") DODAĆ ZE TYLKO TEN KTO NAPISAL
     public ResponseEntity<ReviewResponseDto> updateReview(@PathVariable Integer id, @RequestBody @Validated ReviewDto updatedReview) {
         ReviewResponseDto dto = reviewService.updateReview(id, updatedReview);
         return new ResponseEntity<>(dto, HttpStatus.OK);

@@ -13,31 +13,22 @@ import org.springframework.stereotype.Service;
 public class OwnershipService {
 
     private final LoginRepository loginRepository;
-    private UserRepository userRepository;
 
     @Autowired
     public OwnershipService(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
     }
 
-    public boolean isOwner(Integer username, Integer userId) {
-        if (username == null || username == null) {
+    public boolean isOwner(String username, Integer userId) {
+        if (username == null || userId == null) {
             return false;
         }
 
-        Login login = loginRepository.findById(userId)
-                .orElseThrow(() -> UserNotFoundException.create(userId));
-        return userId == login.getUser().getId();
+        Login login = loginRepository.findByUsername(username)
+                .orElseThrow(() -> UserWithGivenLoginDoesntExistException.create(username));
+        Integer loggedInUserId = login.getUser().getId();
 
+        return userId.equals(loggedInUserId);
     }
-    public boolean isReviewOwner(Integer userId, Integer reviewUserId) {
-        return userId.equals(reviewUserId);
-    }
-    public boolean isLibrarian(Integer userId) {
-        Login login = loginRepository.findById(userId)
-                .orElseThrow(() -> UserNotFoundException.create(userId));
-        return login.getRole() == UserRole.ROLE_LIBRARIAN;
-    }
-
 
 }

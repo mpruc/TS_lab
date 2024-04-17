@@ -10,9 +10,7 @@ public class RegisterDto {
     private UserRole role;
     @NotBlank
     private String username;
-    @NotBlank
     private String name;
-    @NotBlank
     private String email;
 
     public RegisterDto(String password, UserRole role, String username, String name, String email) {

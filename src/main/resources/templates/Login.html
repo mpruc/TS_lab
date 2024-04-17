@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    .head {
+        font-size: 120%;
+        color: indigo;
+    }
+    .content {
+        max-width: 500px;
+        margin: auto;
+    }
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: indigo;
+        text-align: center;
+    }
+
+    li {
+        display: inline-block;
+    }
+
+    li a {
+        display: block;
+        color: white;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    li a:hover {
+        background-color: azure;
+    }
+    .button {
+        border-radius: 12px;
+        background-color: indigo;
+        color: white;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 70%;
+        padding: 8px;
+        margin: 5px 0;
+        box-sizing: border-box;
+        border: 1px solid indigo;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+</style>
+<body>
+<ul>
+    <li><a class="active" href="#home">Home</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#about">About</a></li>
+</ul>
+
+<div class="cont">
+    <div class="content">
+        <h2><span class="head">Log in</span></h2>
+        <form method="post">
+            <label for="uname">Username:</label><br>
+            <input placeholder="Enter username" type="text" id="uname"
+                   name="uname" value=""><br>
+            <label for="password">Password:</label><br>
+            <input placeholder="Enter your password" type="password"
+                   id="password" name="password" value=""> <br><br>
+            <input class="button" type="submit" value="Submit">
+        </form>
+    </div>
+</div>
+
+
+</body>
+</html>
