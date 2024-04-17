@@ -12,7 +12,6 @@ import org.example.lista1techsieciowe.repository.BookRepository;
 import org.example.lista1techsieciowe.repository.LoanRepository;
 import org.example.lista1techsieciowe.repository.LoginRepository;
 import org.example.lista1techsieciowe.repository.UserRepository;
-import org.example.lista1techsieciowe.service.auth.LoginService;
 import org.example.lista1techsieciowe.service.auth.OwnershipService;
 import org.example.lista1techsieciowe.service.auth.exceptions.UserNotFoundException;
 import org.example.lista1techsieciowe.service.auth.exceptions.UserWithGivenLoginDoesntExistException;
@@ -85,10 +84,11 @@ public class LoanService extends OwnershipService {
         loanEntity.setDueDate(loan.getDueDate());
         loanEntity.setBook(book);
         loanEntity.setUser(user);
-
-
         loanEntity.setReturnDate(loan.getReturnDate());
 
+        if (loanEntity.getReturnDate() == null) {
+            book.setAvailableCopies(book.getAvailableCopies() - 1);
+        }
         var newLoan = loanRepository.save(loanEntity);
         return new CreateLoanResponseDto(newLoan.getLoanId(),
                 newLoan.getBook().getBookId(),
@@ -112,6 +112,10 @@ public class LoanService extends OwnershipService {
                 .orElseThrow(() -> BookDoesntExistException.create(updatedLoan.getBook()));
         User user = userRepository.findById(updatedLoan.getUser())
                         .orElseThrow(()-> UserNotFoundException.create(updatedLoan.getUser()));
+        if (existingLoan.getReturnDate() == null && updatedLoan.getReturnDate() != null) {
+            book.setAvailableCopies(book.getAvailableCopies() + 1);
+        }
+
         existingLoan.setBook(book);
         existingLoan.setUser(user);
         existingLoan.setLoanDate(updatedLoan.getLoanDate());

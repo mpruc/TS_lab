@@ -46,14 +46,6 @@ public class LoginController {
         loginService.DeleteByUsername(username);
     }
 
-    @ResponseStatus(code = HttpStatus.CREATED)
-    @PostMapping("/update/{id}")
-    @PreAuthorize("hasRole('LIBRARIAN')")
-    public ResponseEntity<RegisterResponseDto> updateLogin(@PathVariable Integer id, @RequestBody @Validated RegisterDto updatedLogin) {
-        RegisterResponseDto dto = loginService.updateLogin(id, updatedLogin);
-        return new ResponseEntity<>(dto, HttpStatus.OK);
-    }
-
 }
 
 

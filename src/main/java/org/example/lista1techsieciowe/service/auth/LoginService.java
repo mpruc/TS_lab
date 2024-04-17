@@ -71,17 +71,4 @@ public class LoginService {
         );
         loginRepository.delete(login);
     }
-
-    public RegisterResponseDto updateLogin(Integer id, RegisterDto updatedLogin) {
-        Login existingLogin = loginRepository.findById(id).
-                orElseThrow(()-> UserNotFoundException.create(id));
-        User user = existingLogin.getUser();
-
-        existingLogin.setPassword(updatedLogin.getPassword());
-        existingLogin.setRole(updatedLogin.getRole());
-        existingLogin.setUsername(updatedLogin.getUsername());
-
-        Login savedLogin = loginRepository.save(existingLogin);
-        return new RegisterResponseDto(savedLogin.getUsername(), savedLogin.getRole(), user.getId());
-    }
 }

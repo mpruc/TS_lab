@@ -53,14 +53,14 @@ public class ReviewController {
 
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id, @RequestParam(required = false) Integer userId) {
-        reviewService.deleteReview(id, userId);
+    public void delete(@PathVariable Integer id) {
+        reviewService.deleteReview(id);
     }
 
 
     @PostMapping("/update/{id}")
-    public ResponseEntity<ReviewResponseDto> updateReview(@PathVariable Integer id, @RequestBody @Validated ReviewDto updatedReview, @RequestParam(required = false) Integer userId) {
-        ReviewResponseDto dto = reviewService.updateReview(id, updatedReview, userId);
+    public ResponseEntity<ReviewResponseDto> updateReview(@PathVariable Integer id, @RequestBody @Validated ReviewDto updatedReview) {
+        ReviewResponseDto dto = reviewService.updateReview(id, updatedReview);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
