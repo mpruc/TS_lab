@@ -1,7 +1,6 @@
 package org.example.lista1techsieciowe.service.auth;
 
 import org.example.lista1techsieciowe.controller.dto.user.CreateUserDto;
-import org.example.lista1techsieciowe.controller.dto.user.CreateUserResponseDto;
 import org.example.lista1techsieciowe.controller.dto.user.GetUserDto;
 import org.example.lista1techsieciowe.entity.Login;
 import org.example.lista1techsieciowe.entity.User;
@@ -52,32 +51,26 @@ public class UserService {
         );
     }
 
-    public CreateUserResponseDto addUser(CreateUserDto user) {
+    public GetUserDto addUser(CreateUserDto user) {
         var userEntity = new User();
         userEntity.setEmail(user.getEmail());
         userEntity.setName(user.getName());
 
         var newUser = userRepository.save(userEntity);
-        return mapToCreateUserResponseDto(newUser);
+        return mapUser(newUser);
     }
 
     public void deleteUser(Integer id) {
+        userRepository.findById(id)
+                        .orElseThrow(() -> UserNotFoundException.create(id));
         userRepository.deleteById(id);
     }
 
-    public CreateUserResponseDto updateUser(Integer id, CreateUserDto updatedUser) {
+    public GetUserDto updateUser(Integer id, CreateUserDto updatedUser) {
         User existingUser = userRepository.findById(id).orElseThrow(() -> UserNotFoundException.create(id));
         existingUser.setEmail(updatedUser.getEmail());
         existingUser.setName(updatedUser.getName());
         User newUser = userRepository.save(existingUser);
-        return mapToCreateUserResponseDto(newUser);
-    }
-
-    private CreateUserResponseDto mapToCreateUserResponseDto(User user) {
-        return new CreateUserResponseDto(
-                user.getId(),
-                user.getEmail(),
-                user.getName()
-        );
+        return mapUser(newUser);
     }
 }

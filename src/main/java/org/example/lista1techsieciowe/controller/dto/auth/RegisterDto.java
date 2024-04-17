@@ -1,16 +1,24 @@
 package org.example.lista1techsieciowe.controller.dto.auth;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import org.example.lista1techsieciowe.commonTypes.UserRole;
 
 public class RegisterDto {
-    @NotBlank
+    @NotBlank(message = "Password is required")
+    @Schema(name = "password", example = "password")
     private String password;
-    @NotBlank
+    @NotBlank(message = "Role is required")
+    @Schema(name = "role", example = "ROLE_LIBRARIAN")
     private UserRole role;
-    @NotBlank
+    @NotBlank(message = "Username is required")
+    @Schema(name = "username", example = "username")
     private String username;
+    @NotBlank(message = "Name is required" )
+    @Schema(name = "name", example ="name")
     private String name;
+    @NotBlank(message = "email is required" )
+    @Schema(name = "email", example = "example@email.com")
     private String email;
 
     public RegisterDto(String password, UserRole role, String username, String name, String email) {

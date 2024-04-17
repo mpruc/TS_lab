@@ -1,5 +1,7 @@
 package org.example.lista1techsieciowe.controller.dto.auth;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class LoginResponseDto {
     private String token;
 

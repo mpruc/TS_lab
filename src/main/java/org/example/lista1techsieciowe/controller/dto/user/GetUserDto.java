@@ -1,8 +1,13 @@
 package org.example.lista1techsieciowe.controller.dto.user;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class GetUserDto {
+    @Schema(name = "userId", example = "1")
     private Integer id;
+    @Schema(name = "name", example = "name")
     private String name;
+    @Schema(name = "email", example = "example@email.com")
     private String email;
 
     public GetUserDto(Integer id, String name, String email) {

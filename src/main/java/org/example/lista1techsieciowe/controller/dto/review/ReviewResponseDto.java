@@ -1,5 +1,6 @@
 package org.example.lista1techsieciowe.controller.dto.review;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.example.lista1techsieciowe.controller.dto.book.GetBookDto;
 import org.example.lista1techsieciowe.controller.dto.user.GetUserDto;
 import org.example.lista1techsieciowe.entity.Book;
@@ -8,11 +9,15 @@ import org.example.lista1techsieciowe.entity.User;
 import java.sql.Date;
 
 public class ReviewResponseDto {
+    @Schema(name = "id", example ="1" )
     private Integer reviewId;
     private GetBookDto book;
     private GetUserDto user;
+    @Schema(name = "grade", example ="5" )
     private Double grade;
+    @Schema(name = "comment", example ="great" )
     private String comment;
+    @Schema(name = "review date", example ="2024-01-01" )
     private Date reviewDate;
 
     public ReviewResponseDto(Integer reviewId, GetBookDto book, GetUserDto user, Double grade, String comment, Date reviewDate) {

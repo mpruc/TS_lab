@@ -105,6 +105,8 @@ public class ReviewService {
     }
 
 public void deleteReview(Integer id) {
+    reviewRepository.findById(id)
+            .orElseThrow(() -> ReviewDoesntExistException.create(id));
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String username = authentication.getName();
 

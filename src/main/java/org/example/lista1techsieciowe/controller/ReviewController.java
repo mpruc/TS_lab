@@ -1,15 +1,10 @@
 package org.example.lista1techsieciowe.controller;
-
-import org.example.lista1techsieciowe.controller.dto.bookDetails.BookDetailsDto;
-import org.example.lista1techsieciowe.controller.dto.bookDetails.BookDetailsResponseDto;
-import org.example.lista1techsieciowe.controller.dto.loan.GetLoanResponseDto;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.example.lista1techsieciowe.controller.dto.review.ReviewDto;
 import org.example.lista1techsieciowe.controller.dto.review.ReviewResponseDto;
-import org.example.lista1techsieciowe.entity.Review;
-import org.example.lista1techsieciowe.security.JWTTokenFilter;
-import org.example.lista1techsieciowe.service.auth.exceptions.UnauthorizedException;
 import org.example.lista1techsieciowe.service.review.ReviewService;
-import org.example.lista1techsieciowe.service.review.exceptions.ReviewDoesntExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,12 +28,19 @@ public class ReviewController {
 
     @PostMapping("/add")
     @PreAuthorize("permitAll()")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Review added successfully" ),
+            @ApiResponse(responseCode = "404", description = "Failed to add loan", content = @Content )
+    })
     public @ResponseBody ReviewResponseDto addReview(@RequestBody @Validated ReviewDto review){
         return reviewService.addReview(review);
     }
 
     @GetMapping("/getAll")
     @PreAuthorize("permitAll()")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200"),
+    })
     public ResponseEntity<List<ReviewResponseDto>> getALl() {
         List<ReviewResponseDto> dto = reviewService.getAll();
         return new ResponseEntity<>(dto, HttpStatus.OK);
@@ -46,19 +48,33 @@ public class ReviewController {
 
     @GetMapping("/{id}")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ReviewResponseDto> getLoan(@PathVariable Integer id) {
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Review found" ),
+            @ApiResponse(responseCode = "404", description = "Review not found", content = @Content),
+    })
+    public ResponseEntity<ReviewResponseDto> getReview(@PathVariable Integer id) {
         ReviewResponseDto dto = reviewService.getReview(id);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
 
     @DeleteMapping("/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Deleted successfully" ),
+            @ApiResponse(responseCode = "404", description = "Delete failed", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Not authorized", content = @Content)
+    })
     public void delete(@PathVariable Integer id) {
         reviewService.deleteReview(id);
     }
 
 
     @PostMapping("/update/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Review updated successfully" ),
+            @ApiResponse(responseCode = "404", description = "Review update failed", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Not authorized", content = @Content)
+    })
     public ResponseEntity<ReviewResponseDto> updateReview(@PathVariable Integer id, @RequestBody @Validated ReviewDto updatedReview) {
         ReviewResponseDto dto = reviewService.updateReview(id, updatedReview);
         return new ResponseEntity<>(dto, HttpStatus.OK);

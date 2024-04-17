@@ -1,5 +1,8 @@
 package org.example.lista1techsieciowe.controller;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.example.lista1techsieciowe.controller.dto.book.CreateBookDto;
 import org.example.lista1techsieciowe.controller.dto.book.CreateBookResponseDto;
 import org.example.lista1techsieciowe.controller.dto.book.GetBookDto;
@@ -24,6 +27,10 @@ public class BookController {
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping("/add")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Book added successfully" ),
+            @ApiResponse(responseCode = "403", description = "Not authorized", content = @Content)
+    })
     @PreAuthorize("hasRole('LIBRARIAN')")
 
     public @ResponseBody CreateBookResponseDto add(@RequestBody @Validated CreateBookDto book) {
@@ -32,26 +39,41 @@ public class BookController {
 
     @GetMapping("/getAll")
     @PreAuthorize("permitAll()")
+    @ApiResponse(responseCode = "200")
     public @ResponseBody Iterable <GetBookDto> getAllBooks(){
         return bookService.getAll();
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("permitAll()")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Book found" ),
+            @ApiResponse(responseCode = "404", description = "Book not found", content = @Content)
+    })
     public GetBookDto getBook (@PathVariable Integer id) {
 
         return bookService.getBook(id);
     }
 
-
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('LIBRARIAN')")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Deleted successfully" ),
+            @ApiResponse(responseCode = "404", description = "Delete failed", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Not authorized", content = @Content)
+    })
+
     public void delete(@PathVariable int id) {
         bookService.deleteBook(id);
     }
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping("/update/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Book updated successfully" ),
+            @ApiResponse(responseCode = "404", description = "Book not found", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Not authorized", content = @Content)
+    })
     @PreAuthorize("hasRole('LIBRARIAN')")
     public ResponseEntity<CreateBookResponseDto> updateBook(@PathVariable Integer id, @RequestBody @Validated CreateBookDto updatedBook) {
         CreateBookResponseDto updatedBookResponse = bookService.updateBook(id, updatedBook);

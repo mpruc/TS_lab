@@ -1,17 +1,24 @@
 package org.example.lista1techsieciowe.controller.dto.bookDetails;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class BookDetailsResponseDto {
+    @Schema(name = "id", example ="1" )
     private Integer id;
+    @Schema(name = "genre", example ="fantasy" )
     private String genre;
+    @Schema(name = "summary", example ="summary" )
     private String summary;
-    private  String CoverImageURL;
+    @Schema(name = "coverImageUrl", example ="url" )
+    private  String coverImageURL;
+    @Schema(name = "book", example ="1" )
     private Integer book;
 
     public BookDetailsResponseDto(Integer id, String genre, String summary, String coverImageURL, Integer book) {
         this.id = id;
         this.genre = genre;
         this.summary = summary;
-        CoverImageURL = coverImageURL;
+        this.coverImageURL = coverImageURL;
         this.book = book;
     }
 
@@ -40,11 +47,11 @@ public class BookDetailsResponseDto {
     }
 
     public String getCoverImageURL() {
-        return CoverImageURL;
+        return coverImageURL;
     }
 
     public void setCoverImageURL(String coverImageURL) {
-        CoverImageURL = coverImageURL;
+        this.coverImageURL = coverImageURL;
     }
 
     public Integer getBook() {
