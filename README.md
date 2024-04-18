@@ -9,7 +9,7 @@ Projekt ten jest aplikacją backendową do zarządzania biblioteką przy użyciu
 - Recenzowanie książek,
 - Przeglądanie historii wypożyczeń.
 
-## Biblitekarz
+## Bibliotekarz
 - Dodawanie, usuwanie i aktualizowanie wypożyczeń dla użytkowników,
 - Dodawanie, aktualizacja i usuwanie książek,
 - Zarządzanie kontami użytkowników: tworzenie, aktualizacja i usuwanie kont użytkowników.
