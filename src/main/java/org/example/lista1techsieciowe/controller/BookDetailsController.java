@@ -3,6 +3,7 @@ package org.example.lista1techsieciowe.controller;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.lista1techsieciowe.controller.dto.book.CreateBookDto;
 import org.example.lista1techsieciowe.controller.dto.book.CreateBookResponseDto;
 import org.example.lista1techsieciowe.controller.dto.bookDetails.BookDetailsDto;
@@ -17,16 +18,30 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controller handling operations related to book details.
+ */
 @RestController
 @RequestMapping("/bookDetails")
+@Tag(name="Book details")
 
 public class BookDetailsController {
     private final BookDetailsService bookDetailsService;
 
+    /**
+     * Constructor for BookDetailsController.
+     * @param bookDetailsService Service responsible for book details operations.
+     */
     @Autowired
     public BookDetailsController(BookDetailsService bookDetailsService) {
         this.bookDetailsService = bookDetailsService;
     }
+
+    /**
+     * Adds details for a book.
+     * @param bookDetails DTO containing details of the book.
+     * @return Response containing the created book details.
+     */
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping("/add")
     @ApiResponses(value = {
@@ -35,11 +50,14 @@ public class BookDetailsController {
             @ApiResponse(responseCode = "403", description = "Not authorized", content = @Content)
     })
     @PreAuthorize("hasRole('LIBRARIAN')")
-
     public @ResponseBody BookDetailsResponseDto addBookDetails(@RequestBody BookDetailsDto bookDetails){
         return bookDetailsService.addBookDetails(bookDetails);
     }
 
+    /**
+     * Retrieves all book details.
+     * @return ResponseEntity containing a list of book details.
+     */
     @GetMapping("/getAll")
     @PreAuthorize("permitAll()")
     @ApiResponse(responseCode = "200")
@@ -48,7 +66,11 @@ public class BookDetailsController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-
+    /**
+     * Retrieves details of a specific book by ID.
+     * @param id ID of the book details to retrieve.
+     * @return ResponseEntity containing the book details.
+     */
     @GetMapping("/{id}")
     @PreAuthorize("permitAll()")
     @ApiResponses(value = {
@@ -60,6 +82,10 @@ public class BookDetailsController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
+    /**
+     * Deletes book details by ID.
+     * @param id ID of the book details to delete.
+     */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('LIBRARIAN')")
     @ApiResponses(value = {
@@ -71,7 +97,12 @@ public class BookDetailsController {
         bookDetailsService.deleteBookDetails(id);
     }
 
-    @ResponseStatus(code = HttpStatus.CREATED)
+    /**
+     * Updates book details with new information.
+     * @param id ID of the book details to update.
+     * @param updatedBookDetails DTO containing updated book details information.
+     * @return ResponseEntity containing the updated book details response.
+     */
     @PostMapping("/update/{id}")
     @PreAuthorize("hasRole('LIBRARIAN')")
     @ApiResponses(value = {

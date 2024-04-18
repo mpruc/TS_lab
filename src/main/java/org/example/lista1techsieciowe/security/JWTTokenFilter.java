@@ -20,16 +20,33 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
+/**
+ * Class that represents a filter for processing JWT tokens in the HTTP requests.
+ * It extends OncePerRequestFilter to ensure it's executed only once per request.
+ */
 @Component
 public class JWTTokenFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
 
+    /**
+     * Constructs a new JWTTokenFilter with the provided JwtService dependency.
+     * @param jwtService The JwtService instance to use for token-related operations.
+     */
     @Autowired
     public JWTTokenFilter(JwtService jwtService) {
         this.jwtService = jwtService;
     }
 
+    /**
+     * Filters the HTTP request to process JWT tokens.
+     *
+     * @param request     The HTTP servlet request.
+     * @param response    The HTTP servlet response.
+     * @param filterChain The filter chain for invoking subsequent filters.
+     * @throws ServletException If an exception occurs during servlet processing.
+     * @throws IOException      If an I/O exception occurs.
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {

@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+/**
+ * Entity class representing a book.
+ */
 @Entity
 @Table(name = "book")
 public class Book {

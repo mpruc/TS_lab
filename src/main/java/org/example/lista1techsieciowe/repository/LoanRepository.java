@@ -7,7 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repository interface for accessing and managing loan entities.
+ */
 @Repository
-public interface LoanRepository extends JpaRepository<Loan, Integer> {
+public interface LoanRepository extends CrudRepository<Loan, Integer> {
     List<Loan> findByUserId(Integer userId);
 }

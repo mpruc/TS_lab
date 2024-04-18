@@ -24,6 +24,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+/**
+ * Service that provides operations related to loans.
+ */
 @Service
 public class LoanService extends OwnershipService {
     private final LoanRepository loanRepository;
@@ -31,6 +35,14 @@ public class LoanService extends OwnershipService {
     private final UserRepository userRepository;
     private final LoginRepository loginRepository;
 
+    /**
+     * Constructs a new LoanService with the provided dependencies.
+     *
+     * @param loanRepository  The repository for Loan entities.
+     * @param bookRepository  The repository for Book entities.
+     * @param userRepository  The repository for User entities.
+     * @param loginRepository The repository for Login entities.
+     */
     @Autowired
     public LoanService(LoanRepository loanRepository, BookRepository bookRepository, UserRepository userRepository, LoginRepository loginRepository) {
         super(loginRepository);
@@ -40,23 +52,43 @@ public class LoanService extends OwnershipService {
         this.loginRepository = loginRepository;
     }
 
+    /**
+     * Retrieves all loans, optionally filtered by user ID.
+     *
+     * @param userId The ID of the user to filter loans by. If null, retrieves all loans.
+     * @return A list of GetLoanResponseDto containing loan details.
+     */
     @PreAuthorize("hasRole('LIBRARIAN') or isAuthenticated() and this.isOwner(authentication.name, #userId)")
     public List<GetLoanResponseDto> getAll(Integer userId) {
         List<Loan> loans;
         if(userId == null) {
-            loans = loanRepository.findAll();
+            loans = (List<Loan>) loanRepository.findAll();
         } else {
             loans = loanRepository.findByUserId(userId);
         }
         return loans.stream().map(this :: mapLoan).collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves loan details by ID.
+     *
+     * @param id The ID of the loan to retrieve.
+     * @return A GetLoanResponseDto containing loan details.
+     * @throws LoanDoesntExistException If the loan with the specified ID is not found.
+     */
     @PreAuthorize("hasRole('LIBRARIAN') or isAuthenticated() and this.isOwner(authentication.name, #userId)")
     public GetLoanResponseDto getLoan(Integer id) {
         Loan loan = loanRepository.findById(id).orElseThrow(() -> LoanDoesntExistException.create(id));
         return mapLoan(loan);
     }
 
+
+    /**
+     * Maps a Loan entity to a GetLoanResponseDto.
+     *
+     * @param loan The Loan entity to map.
+     * @return A GetLoanResponseDto containing loan details.
+     */
     private GetLoanResponseDto mapLoan(Loan loan) {
         GetUserDto user = new GetUserDto(loan.getUser().getId(), loan.getUser().getName(), loan.getUser().getEmail());
         GetBookDto book = new GetBookDto(
@@ -70,7 +102,14 @@ public class LoanService extends OwnershipService {
         return new GetLoanResponseDto(loan.getLoanId(), book, user, loan.getLoanDate(), loan.getDueDate(), loan.getReturnDate());
     }
 
-
+    /**
+     * Adds a new loan.
+     *
+     * @param loan The DTO containing loan details.
+     * @return A CreateLoanResponseDto containing information about the added loan.
+     * @throws UserWithGivenLoginDoesntExistException If the specified user does not exist.
+     * @throws BookDoesntExistException             If the specified book does not exist.
+     */
     public CreateLoanResponseDto addLoan(CreateLoanDto loan) {
         User user = userRepository.findById(loan.getUser())
                 .orElseThrow(() -> UserWithGivenLoginDoesntExistException.create(String.valueOf(loan.getUser())));
@@ -98,13 +137,29 @@ public class LoanService extends OwnershipService {
                 newLoan.getReturnDate());
     }
 
-
+    /**
+     * Deletes a loan by ID.
+     *
+     * @param id The ID of the loan to delete.
+     * @throws LoanDoesntExistException If the loan with the specified ID is not found.
+     */
     public void deleteLoan(Integer id) {
         if (!loanRepository.existsById(id)) {
-            throw BookDoesntExistException.create(id);
+            throw LoanDoesntExistException.create(id);
         }
         loanRepository.deleteById(id);
     }
+
+    /**
+     * Updates a loan with the specified ID.
+     *
+     * @param id           The ID of the loan to update.
+     * @param updatedLoan  The DTO containing updated loan details.
+     * @return A CreateLoanResponseDto containing the updated loan details.
+     * @throws LoanDoesntExistException      If the specified loan does not exist.
+     * @throws BookDoesntExistException      If the specified book does not exist.
+     * @throws UserNotFoundException        If the specified user does not exist.
+     */
 
     public CreateLoanResponseDto updateLoan(Integer id, CreateLoanDto updatedLoan) {
         Loan existingLoan = loanRepository.findById(id).orElseThrow(() -> LoanDoesntExistException.create(id));
@@ -123,16 +178,13 @@ public class LoanService extends OwnershipService {
         existingLoan.setReturnDate(updatedLoan.getReturnDate());
 
         Loan savedLoan = loanRepository.save(existingLoan);
-        return mapToCreateLoanResponseDto(savedLoan);
-    }
-    private CreateLoanResponseDto mapToCreateLoanResponseDto(Loan loan) {
         return new CreateLoanResponseDto(
-                loan.getLoanId(),
-                loan.getBook().getBookId(),
-                loan.getUser().getId(),
-                loan.getLoanDate(),
-                loan.getDueDate(),
-                loan.getReturnDate()
+                savedLoan.getLoanId(),
+                savedLoan.getBook().getBookId(),
+                savedLoan.getUser().getId(),
+                savedLoan.getLoanDate(),
+                savedLoan.getDueDate(),
+                savedLoan.getReturnDate()
         );
     }
 

@@ -3,6 +3,9 @@ package org.example.lista1techsieciowe.entity;
 import jakarta.persistence.*;
 import org.example.lista1techsieciowe.commonTypes.UserRole;
 
+/**
+ * Entity class representing a login.
+ */
 @Entity
 @Table(name="login")
 public class Login {

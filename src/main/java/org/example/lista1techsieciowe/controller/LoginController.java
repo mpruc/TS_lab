@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.lista1techsieciowe.controller.dto.auth.LoginDto;
 import org.example.lista1techsieciowe.controller.dto.auth.LoginResponseDto;
 import org.example.lista1techsieciowe.controller.dto.auth.RegisterDto;
@@ -15,24 +16,44 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller handling authentication operations.
+ */
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Auth")
 
 public class LoginController {
     private final LoginService loginService;
+
+    /**
+     * Constructor for LoginController.
+     * @param loginService Service responsible for authentication operations.
+     */
     @Autowired
     public LoginController(LoginService loginService) {
         this.loginService = loginService;
     }
 
+    /**
+     * Registers a new user.
+     * @param requestBody DTO containing registration information.
+     * @return ResponseEntity containing the registration response.
+     */
     @PostMapping("/register")
     @PreAuthorize("hasRole('LIBRARIAN')")
     @ApiResponse(responseCode = "201")
-    public ResponseEntity<RegisterResponseDto> register(@RequestBody RegisterDto requestbody){
-        RegisterResponseDto dto = loginService.register(requestbody);
+    public ResponseEntity<RegisterResponseDto> register(@RequestBody RegisterDto requestBody){
+        RegisterResponseDto dto = loginService.register(requestBody);
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
 
 }
+
+    /**
+     * Logs in a user.
+     * @param requestBody DTO containing login credentials.
+     * @return ResponseEntity containing the login response.
+     */
     @PostMapping("/log")
     @PreAuthorize("permitAll()")
     @SecurityRequirements
@@ -46,6 +67,11 @@ public class LoginController {
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
 
     }
+
+    /**
+     * Deletes a user by username.
+     * @param username Username of the user to delete.
+     */
     @DeleteMapping("/{username}")
     @PreAuthorize("hasRole('LIBRARIAN')")
     @ApiResponses(value = {

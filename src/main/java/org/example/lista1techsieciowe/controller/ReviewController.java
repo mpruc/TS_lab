@@ -2,6 +2,7 @@ package org.example.lista1techsieciowe.controller;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.lista1techsieciowe.controller.dto.review.ReviewDto;
 import org.example.lista1techsieciowe.controller.dto.review.ReviewResponseDto;
 import org.example.lista1techsieciowe.service.review.ReviewService;
@@ -14,18 +15,32 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controller handling operations related to reviews.
+ */
 @RestController
 @RequestMapping("/review")
 @PreAuthorize("isAuthenticated()")
+@Tag(name = "Review")
 
 public class ReviewController {
     private final ReviewService reviewService;
+
+    /**
+     * Constructor for ReviewController.
+     * @param reviewService Service responsible for review operations.
+     */
     @Autowired
     public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
     }
-    @ResponseStatus(code = HttpStatus.CREATED)
 
+    /**
+     * Adds a new review.
+     * @param review DTO representing the review to be added.
+     * @return Response containing the created review.
+     */
+    @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping("/add")
     @PreAuthorize("permitAll()")
     @ApiResponses(value = {
@@ -36,6 +51,10 @@ public class ReviewController {
         return reviewService.addReview(review);
     }
 
+    /**
+     * Retrieves all reviews.
+     * @return ResponseEntity containing a list of review DTOs.
+     */
     @GetMapping("/getAll")
     @PreAuthorize("permitAll()")
     @ApiResponses(value = {
@@ -46,6 +65,11 @@ public class ReviewController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
+    /**
+     * Retrieves details of a specific review by ID.
+     * @param id ID of the review to retrieve.
+     * @return ResponseEntity containing the review details.
+     */
     @GetMapping("/{id}")
     @PreAuthorize("permitAll()")
     @ApiResponses(value = {
@@ -57,7 +81,10 @@ public class ReviewController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-
+    /**
+     * Deletes a review by ID.
+     * @param id ID of the review to delete.
+     */
     @DeleteMapping("/{id}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Deleted successfully" ),
@@ -68,7 +95,12 @@ public class ReviewController {
         reviewService.deleteReview(id);
     }
 
-
+    /**
+     * Updates a review with new information.
+     * @param id ID of the review to update.
+     * @param updatedReview DTO containing updated review information.
+     * @return ResponseEntity containing the updated review response.
+     */
     @PostMapping("/update/{id}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Review updated successfully" ),

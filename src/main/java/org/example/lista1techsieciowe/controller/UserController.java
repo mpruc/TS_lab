@@ -3,6 +3,7 @@ package org.example.lista1techsieciowe.controller;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.lista1techsieciowe.controller.dto.review.ReviewDto;
 import org.example.lista1techsieciowe.controller.dto.review.ReviewResponseDto;
 import org.example.lista1techsieciowe.controller.dto.user.CreateUserDto;
@@ -19,18 +20,32 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
+
+/**
+ * Controller handling operations related to users.
+ */
 @RestController
 @RequestMapping("/user")
 @PreAuthorize("isAuthenticated()")
+@Tag(name = "User")
 
 public class UserController {
     private final UserService userService;
 
+    /**
+     * Constructor for UserController.
+     * @param userService Service responsible for user operations.
+     */
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
+    /**
+     * Adds a new user.
+     * @param dto DTO representing the user to be added.
+     * @return DTO containing the created user.
+     */
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping("/add")
     @PreAuthorize("hasRole('LIBRARIAN')")
@@ -42,6 +57,10 @@ public class UserController {
         return userService.addUser(dto);
     }
 
+    /**
+     * Retrieves all users.
+     * @return Iterable containing all user DTOs.
+     */
     @GetMapping("/getAll")
     @PreAuthorize("hasRole('LIBRARIAN')")
     @ApiResponses(value = {
@@ -49,10 +68,14 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Not authorized", content = @Content)
     })
     public @ResponseBody Iterable <GetUserDto> getAllUsers(){
-
         return userService.getAll();
     }
 
+    /**
+     * Retrieves details of the currently authenticated user.
+     * @param principal Principal object containing user information.
+     * @return ResponseEntity containing the user details.
+     */
     @GetMapping("/me")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User found" ),
@@ -64,6 +87,11 @@ public class UserController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
+    /**
+     * Retrieves details of a specific user by ID.
+     * @param id ID of the user to retrieve.
+     * @return DTO containing the user details.
+     */
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('LIBRARIAN')")
     @ApiResponses(value = {
@@ -72,10 +100,13 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Not authorized", content = @Content)
     })
     public GetUserDto getUser(@PathVariable Integer id) {
-
         return userService.getUser(id);
     }
 
+    /**
+     * Deletes a user by ID.
+     * @param id ID of the user to delete.
+     */
     @DeleteMapping("/{id}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Deleted successfully" ),
@@ -86,6 +117,12 @@ public class UserController {
         userService.deleteUser(id);
     }
 
+    /**
+     * Updates a user with new information.
+     * @param id ID of the user to update.
+     * @param updatedUser DTO containing updated user information.
+     * @return ResponseEntity containing the updated user response.
+     */
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping("/update/{id}")
     @PreAuthorize("hasRole('LIBRARIAN')")

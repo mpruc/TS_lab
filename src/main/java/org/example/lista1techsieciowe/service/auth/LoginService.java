@@ -20,6 +20,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Service that handles user authentication operations.
+ */
 @Service
 public class LoginService {
     private final LoginRepository loginRepository;
@@ -27,6 +30,14 @@ public class LoginService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Constructs a new LoginService with the provided dependencies.
+     *
+     * @param loginRepository  The repository for Login entities.
+     * @param userRepository   The repository for User entities.
+     * @param jwtService       The JWT service for token operations.
+     * @param passwordEncoder  The password encoder for encoding passwords.
+     */
     @Autowired
     public LoginService(LoginRepository loginRepository, UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder) {
         this.loginRepository = loginRepository;
@@ -34,6 +45,14 @@ public class LoginService {
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
     }
+
+    /**
+     * Registers a new user.
+     *
+     * @param registerDto The DTO containing registration details.
+     * @return A RegisterResponseDto containing registration information.
+     * @throws UserAlreadyExistsException If a user with given username already exists.
+     */
     @Transactional
     public RegisterResponseDto register(RegisterDto registerDto) {
         Optional<Login> existingLogin = loginRepository.findByUsername(registerDto.getUsername());
@@ -56,7 +75,14 @@ public class LoginService {
 
         return new RegisterResponseDto(login.getUsername(), login.getRole(), login.getLoginId());
     }
-
+    /**
+     * Logs in a user and generates a JWT token.
+     *
+     * @param dto The DTO containing login credentials.
+     * @return A LoginResponseDto containing the JWT token.
+     * @throws UserWithGivenLoginDoesntExistException If user with given username doesn't exist.
+     * @throws IncorrectPasswordException If the provided password is incorrect.
+     */
     public LoginResponseDto log (LoginDto dto) {
         Login login = loginRepository.findByUsername(dto.getUsername()).orElseThrow(()-> UserWithGivenLoginDoesntExistException.create(dto.getUsername()));
         if(!passwordEncoder.matches(dto.getPassword(), login.getPassword())) {
@@ -65,6 +91,12 @@ public class LoginService {
         String token = jwtService.generateToken(login);
         return new LoginResponseDto(token);
     }
+    /**
+     * Deletes a user by username.
+     *
+     * @param username The username of the user to delete.
+     * @throws UserWithGivenLoginDoesntExistException If no user with the given username exists.
+     */
     public void DeleteByUsername(String username) {
         Login login = loginRepository.findByUsername(username).orElseThrow(() ->
                 UserWithGivenLoginDoesntExistException.create(username)

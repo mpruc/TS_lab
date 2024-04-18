@@ -2,6 +2,9 @@ package org.example.lista1techsieciowe.entity;
 
 import jakarta.persistence.*;
 
+/**
+ * Entity class representing a book detail.
+ */
 @Entity
 @Table(name = "book_details")
 public class BookDetails {

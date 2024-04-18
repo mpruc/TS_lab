@@ -16,53 +16,55 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+/**
+ * Provides configuration for Spring Security.
+ */
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
 
-//    @Value("${jwt.token.key}")
-//    private String key;
     private final JWTTokenFilter jwtTokenFilter;
-
+    /**
+     * Constructs a new SecurityConfig with the provided JWTTokenFilter dependency.
+     *
+     * @param jwtTokenFilter The JWTTokenFilter instance to be used for JWT token processing.
+     */
     public SecurityConfig(JWTTokenFilter jwtTokenFilter) {
-
         this.jwtTokenFilter = jwtTokenFilter;
     }
-
+    /**
+     * Configures the security filter chain for HTTP requests.
+     *
+     * @param http The HttpSecurity object to configure security settings.
+     * @return A SecurityFilterChain instance.
+     * @throws Exception If an exception occurs during configuration.
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-//                        authorizationManagerRequestMatcherRegistry
-//                                .requestMatchers("/error").permitAll());
                 .build();
     }
 
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        return http
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .sessionManagement(httpSecuritySessionManagementConfigurer ->
-//                        httpSecuritySessionManagementConfigurer
-//                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
-////                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-////                        authorizationManagerRequestMatcherRegistry
-////                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
-////                                .requestMatchers(HttpMethod.POST, "/register").hasRole("ADMIN")
-////                )
-//                .build();
-//    }
-
+    /**
+     * Provides a PasswordEncoder bean for encoding passwords.
+     *
+     * @return A PasswordEncoder instance.
+     */
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Retrieves the AuthenticationManager bean.
+     *
+     * @param config The AuthenticationConfiguration object.
+     * @return An AuthenticationManager instance.
+     * @throws Exception If an exception occurs during retrieval.
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

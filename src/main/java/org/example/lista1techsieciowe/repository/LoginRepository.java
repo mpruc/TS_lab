@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Repository interface for accessing and managing login entities.
+ */
 @Repository
 public interface LoginRepository extends CrudRepository<Login, Integer> {
     Optional<Login> findByUsername(String username);

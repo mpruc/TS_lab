@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 
 import java.sql.Date;
 
+/**
+ * Entity class representing a loan.
+ */
 @Entity
 @Table(name = "loan")
 public class Loan {

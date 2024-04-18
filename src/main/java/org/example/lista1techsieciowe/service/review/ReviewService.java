@@ -27,7 +27,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+/**
+ * Service that provides operations related to reviews.
+ */
 @Service
 public class ReviewService {
     private final ReviewRepository reviewRepository;
@@ -35,6 +37,14 @@ public class ReviewService {
     private final BookRepository bookRepository;
     private final LoginRepository loginRepository;
 
+    /**
+     * Constructs a ReviewService instance.
+     *
+     * @param reviewRepository The repository for review entities.
+     * @param userRepository   The repository for user entities.
+     * @param bookRepository   The repository for book entities.
+     * @param loginRepository  The repository for login entities.
+     */
     @Autowired
     public ReviewService(ReviewRepository reviewRepository, UserRepository userRepository, BookRepository bookRepository, LoginRepository loginRepository) {
         this.reviewRepository = reviewRepository;
@@ -43,23 +53,41 @@ public class ReviewService {
         this.loginRepository = loginRepository;
     }
 
+    /**
+     * Retrieves all reviews.
+     *
+     * @return A list of ReviewResponseDto objects representing all reviews.
+     */
     public List<ReviewResponseDto> getAll() {
         List<Review> review = (List<Review>) reviewRepository.findAll();
         return review.stream().map(this::mapReview).collect(Collectors.toList());
 
     }
-
+    /**
+     * Retrieves a review by its ID.
+     *
+     * @param id The ID of the review to retrieve.
+     * @return The ReviewResponseDto object representing the retrieved review.
+     * @throws ReviewDoesntExistException If the review with the given ID does not exist.
+     */
     public ReviewResponseDto getReview(Integer id) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> ReviewDoesntExistException.create(id));
         return mapReview(review);
     }
 
+    /**
+     * Maps a Review entity to a ReviewResponseDto object.
+     *
+     * @param review The Review entity to map.
+     * @return The mapped ReviewResponseDto object.
+     */
     private ReviewResponseDto mapReview(Review review) {
         GetUserDto user = new GetUserDto(
                 review.getUser().getId(),
                 review.getUser().getName(),
                 review.getUser().getEmail());
+
         GetBookDto book = new GetBookDto(
                 review.getBook().getBookId(),
                 review.getBook().getIsbn(),
@@ -68,9 +96,18 @@ public class ReviewService {
                 review.getBook().getTitle(),
                 review.getBook().getYearOfPublish(),
                 review.getBook().getAvailableCopies() > 0);
+
         return new ReviewResponseDto(review.getReviewId(), book, user, review.getGrade(), review.getComment(), review.getReviewDate());
     }
 
+    /**
+     * Adds a new review.
+     *
+     * @param review The DTO containing review details.
+     * @return A ReviewResponseDto containing the added review details.
+     * @throws UserWithGivenLoginDoesntExistException  If the specified user does not exist.
+     * @throws BookDoesntExistException               If the specified book does not exist.
+     */
     public ReviewResponseDto addReview(ReviewDto review) {
         User user = userRepository.findById(review.getUser())
                 .orElseThrow(() -> UserWithGivenLoginDoesntExistException.create(String.valueOf(review.getUser())));
@@ -104,35 +141,51 @@ public class ReviewService {
         return new ReviewResponseDto(newReview.getReviewId(), getBookDto, getUserDto, newReview.getGrade(), newReview.getComment(), newReview.getReviewDate());
     }
 
-public void deleteReview(Integer id) {
-    reviewRepository.findById(id)
-            .orElseThrow(() -> ReviewDoesntExistException.create(id));
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    String username = authentication.getName();
+    /**
+    * Deletes a review.
+    *
+    * @param id The ID of the review to delete.
+    * @throws ReviewDoesntExistException If the review with the given ID does not exist.
+    * @throws UnauthorizedException      If the user is not authorized to delete the review.
+    */
+    public void deleteReview(Integer id) {
+        reviewRepository.findById(id)
+                .orElseThrow(() -> ReviewDoesntExistException.create(id));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
 
-    var login = loginRepository.findByUsername(username)
-            .orElseThrow(() -> UserWithGivenLoginDoesntExistException.create(username));
+        var login = loginRepository.findByUsername(username)
+                .orElseThrow(() -> UserWithGivenLoginDoesntExistException.create(username));
 
-    UserRole role = login.getRole();
+        UserRole role = login.getRole();
 
-    Optional<Review> optionalReview = reviewRepository.findById(id);
+        Optional<Review> optionalReview = reviewRepository.findById(id);
 
-    if (optionalReview.isPresent()) {
-        Review review = optionalReview.get();
+        if (optionalReview.isPresent()) {
+            Review review = optionalReview.get();
 
 
-        Integer userId = login.getUser().getId();
+            Integer userId = login.getUser().getId();
 
-        if (!reviewRepository.existsById(id)) {
-            throw ReviewDoesntExistException.create(id);
-        } else if (role == UserRole.ROLE_LIBRARIAN || review.getUser().getId().equals(userId)) {
-            reviewRepository.deleteById(id);
-        } else {
-            throw UnauthorizedException.create();
+            if (!reviewRepository.existsById(id)) {
+                throw ReviewDoesntExistException.create(id);
+            } else if (role == UserRole.ROLE_LIBRARIAN || review.getUser().getId().equals(userId)) {
+                reviewRepository.deleteById(id);
+            } else {
+                throw UnauthorizedException.create();
+            }
         }
     }
-}
 
+    /**
+     * Updates a review.
+     *
+     * @param id            The ID of the review to update.
+     * @param updatedReview The ReviewDto object containing the updated details of the review.
+     * @return The updated ReviewResponseDto object representing the review.
+     * @throws ReviewDoesntExistException If the review with the given ID does not exist.
+     * @throws UnauthorizedException      If the user is not authorized to update the review.
+     */
     public ReviewResponseDto updateReview(Integer id, ReviewDto updatedReview) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();

@@ -12,26 +12,52 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Service that provides operations related to books.
+ */
 @Service
 public class BookService {
     private final BookRepository bookRepository;
 
+    /**
+     * Constructs a new BookService with the provided dependencies.
+     *
+     * @param bookRepository The repository for Book entities.
+     */
     @Autowired
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
+    /**
+     * Retrieves all books.
+     *
+     * @return A list of GetBookDto containing book details.
+     */
     public List<GetBookDto> getAll() {
-
         List<Book> book = (List<Book>) bookRepository.findAll();
         return book.stream().map(this :: mapBook).collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves a book by ID.
+     *
+     * @param id The ID of the book to retrieve.
+     * @return A GetBookDto containing book details.
+     * @throws BookDoesntExistException If the book with the specified ID is not found.
+     */
     public GetBookDto getBook( Integer id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> BookDoesntExistException.create(id));
         return mapBook(book);
     }
+
+    /**
+     * Maps a Book entity to a GetBookDto.
+     *
+     * @param book The Book entity to map.
+     * @return A GetBookDto containing book details.
+     */
     private GetBookDto mapBook(Book book) {
         return new GetBookDto(
                 book.getBookId(),
@@ -44,6 +70,12 @@ public class BookService {
                 );
     }
 
+    /**
+     * Adds a new book.
+     *
+     * @param book The CreateBookDto containing book details.
+     * @return A CreateBookResponseDto containing the newly created book details.
+     */
     public CreateBookResponseDto addBook(CreateBookDto book) {
         var bookEntity = new Book();
         bookEntity.setIsbn(book.getIsbn());
@@ -63,9 +95,14 @@ public class BookService {
                 newBook.getYearOfPublish(),
                 newBook.getAvailableCopies()
         );
-
     }
 
+    /**
+     * Deletes a book by ID.
+     *
+     * @param id The ID of the book to delete.
+     * @throws BookDoesntExistException If the book with the specified ID is not found.
+     */
     public void deleteBook(Integer id) {
         if (!bookRepository.existsById(id)) {
             throw BookDoesntExistException.create(id);
@@ -73,6 +110,14 @@ public class BookService {
         bookRepository.deleteById(id);
     }
 
+    /**
+     * Updates a book's details.
+     *
+     * @param id          The ID of the book to update.
+     * @param updatedBook The CreateBookDto containing updated book details.
+     * @return A CreateBookResponseDto containing the updated book details.
+     * @throws BookDoesntExistException If the book with the specified ID is not found.
+     */
     public CreateBookResponseDto updateBook(Integer id, CreateBookDto updatedBook) {
 
         Book existingBook = bookRepository.findById(id)
@@ -89,6 +134,13 @@ public class BookService {
 
         return mapToCreateBookResponseDto(savedBook);
     }
+
+    /**
+     * Maps a Book entity to a CreateBookResponseDto.
+     *
+     * @param book The Book entity to map.
+     * @return A CreateBookResponseDto containing book details.
+     */
     private CreateBookResponseDto mapToCreateBookResponseDto(Book book) {
         return new CreateBookResponseDto(
                 book.getBookId(),
