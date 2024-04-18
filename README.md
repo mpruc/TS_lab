@@ -6,7 +6,7 @@ Projekt ten jest aplikacją backendową do zarządzania biblioteką przy użyciu
 - Logowanie,
 - Przeglądanie wszystkich książek oraz szczegółów dotyczących książek,
 - Wyszukiwanie książek oraz szczegółów dotyczących książek - czytelnik może wyszukiwać książki oraz ich szczegóły dostępne w bibliotece poprzez id danej książki/szczegółów książki,
-- Recenzowanie książek,
+- Recenzowanie książek oraz przeglądanie recenzji,
 - Przeglądanie historii wypożyczeń.
 
 ## Bibliotekarz
