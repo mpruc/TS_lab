@@ -1,5 +1,6 @@
 # Projekt
-Cały dotychczasowy program znajduje się na branchu main
+*Cały dotychczasowy program znajduje się na branchu main
+*  
 # Lista 3. 
 Lista 3. została umieszczona na branchu 'lista3' 
 # Lista 4
