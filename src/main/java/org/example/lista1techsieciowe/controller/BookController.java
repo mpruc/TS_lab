@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * Controller handling operations related to books.
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/book")
 @Tag(name = "Book")
 

@@ -22,6 +22,7 @@ import java.util.List;
  * Controller handling operations related to book details.
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/bookDetails")
 @Tag(name="Book details")
 

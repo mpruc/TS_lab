@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
  * Controller handling authentication operations.
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/auth")
 @Tag(name = "Auth")
 

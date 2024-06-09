@@ -21,6 +21,7 @@ import java.util.List;
  * Controller handling operations related to loans.
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/loan")
 @Tag(name = "Loan")
 

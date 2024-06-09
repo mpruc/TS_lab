@@ -19,6 +19,7 @@ import java.util.List;
  * Controller handling operations related to reviews.
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/review")
 @PreAuthorize("isAuthenticated()")
 @Tag(name = "Review")

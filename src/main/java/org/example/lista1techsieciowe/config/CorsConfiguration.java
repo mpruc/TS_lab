@@ -1,0 +1,20 @@
+package org.example.lista1techsieciowe.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+@EnableWebMvc
+public class CorsConfiguration implements WebMvcConfigurer {
+    @Bean
+    public WebMvcConfigurer corsConfigurer(){
+        return new WebMvcConfigurer() {
+            public void addCorsMapping(CorsRegistry registery) {
+                registery.addMapping("/**").allowedMethods("").allowedOrigins("");
+            }
+        };
+    }
+}

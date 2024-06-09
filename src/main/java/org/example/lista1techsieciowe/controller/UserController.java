@@ -25,6 +25,7 @@ import java.security.Principal;
  * Controller handling operations related to users.
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/user")
 @PreAuthorize("isAuthenticated()")
 @Tag(name = "User")
