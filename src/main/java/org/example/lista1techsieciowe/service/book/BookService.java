@@ -104,11 +104,16 @@ public class BookService {
      * @throws BookDoesntExistException If the book with the specified ID is not found.
      */
     public void deleteBook(Integer id) {
-        if (!bookRepository.existsById(id)) {
-            throw BookDoesntExistException.create(id);
+        try {
+            if (!bookRepository.existsById(id)) {
+                throw BookDoesntExistException.create(id);
+            }
+            bookRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete book with id: " + id, e);
         }
-        bookRepository.deleteById(id);
     }
+
 
     /**
      * Updates a book's details.

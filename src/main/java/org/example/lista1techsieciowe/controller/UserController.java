@@ -132,7 +132,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User update failed", content = @Content),
             @ApiResponse(responseCode = "403", description = "Not authorized", content = @Content)
     })
-    public ResponseEntity<GetUserDto> updateReview(@PathVariable Integer id, @RequestBody @Validated CreateUserDto updatedUser) {
+    public ResponseEntity<GetUserDto> updateUser(@PathVariable Integer id, @RequestBody @Validated CreateUserDto updatedUser) {
         GetUserDto dto = userService.updateUser(id, updatedUser);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
